@@ -5,12 +5,12 @@ namespace Sanic {
 	class Player {
 
 	public:
-		Player();
+		Player(SDL_Renderer *renderer);
 		~Player();
 
 		void TakeDamage();
 		void Move(bool dir);
-		void Render(SDL_Window* _window);
+		void Render(SDL_Renderer* renderer);
 
 	private:
 		const float maxSpeed = 3;
@@ -25,10 +25,9 @@ namespace Sanic {
 
 		const int spriteSize=32;
 
-		SDL_Surface* playerSprite;
+		SDL_Surface* playerSurf;
+		SDL_Texture* playerTex;
 		void Die();
-		//The surface contained by the window
-		SDL_Surface* gScreenSurface = NULL;
-		SDL_Rect* playerSpritePos;
+		SDL_Rect* playerDestRect;
 	};
 }
