@@ -21,6 +21,6 @@ Sanic::Background::~Background() {
 
 void Sanic::Background::DrawBackground(SDL_Renderer* _render) {
 
-	SDL_SetRenderDrawColor(_render, 65, 0, 0, 255);
+	SDL_SetRenderDrawColor(_render, 82, 170, 173, 255);
 	SDL_RenderFillRect(_render, empty);
 }
