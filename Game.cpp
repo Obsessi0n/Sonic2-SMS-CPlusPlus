@@ -26,7 +26,7 @@ Sanic::Game::Game()
 
 	input = new InputSystem();
 
-	player = new Player(renderer);
+	player = new Player();
 	background = new Background();
 
 	is_running = true;
@@ -70,8 +70,18 @@ void Sanic::Game::update()
 
 void Sanic::Game::render()
 {
+	
+	////background color
+	//SDL_SetRenderDrawColor(renderer, 64, 0, 0, 255);
+	//SDL_RenderClear(renderer);
+    //SDL_RenderPresent(renderer);
+
+
 	background->DrawBackground(renderer);
-	player->Render(renderer);
-	//Render the objects
-	SDL_RenderPresent(renderer);
+
+	// Render player
+	player->Render(window);
+
+	//Update the surface
+	SDL_UpdateWindowSurface(window);
 }
