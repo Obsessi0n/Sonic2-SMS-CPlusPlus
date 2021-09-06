@@ -39,7 +39,6 @@ Sanic::Game::~Game()
 	delete input;
 	delete background;
 
-	SDL_FreeSurface(finalSurface);
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
@@ -48,28 +47,22 @@ Sanic::Game::~Game()
 
 void Sanic::Game::handleEvents()
 {
-
 	input->handleInput(player);
 
 	if (input->handleInput(player) == -1) {
 		is_running = false;
 	}
-	
-	
-
-
 }
 
 void Sanic::Game::update()
 {
 	// update player position etc
-	
-
 }
 
 
 void Sanic::Game::render()
 {
+	SDL_RenderClear(renderer);
 	background->DrawBackground(renderer);
 	player->Render(renderer);
 	SDL_RenderPresent(renderer);

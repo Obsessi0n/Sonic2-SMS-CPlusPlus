@@ -23,9 +23,7 @@ namespace Sanic {
 		const static int SCREEN_HEIGHT = 196;
 	private:
 		SDL_Window* window = nullptr;
-		SDL_Surface* imgLoader = nullptr;
 		SDL_Surface* screenSurface = nullptr;
-		SDL_Surface* finalSurface = NULL;
 		SDL_Renderer* renderer = nullptr;
 
 		InputSystem* input;
