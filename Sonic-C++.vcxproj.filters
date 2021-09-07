@@ -30,12 +30,10 @@
     <ClCompile Include="Background.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-<ClCompile Include="TextureManager.cpp">
+    <ClCompile Include="TextureManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-<ClCompile Include="MapLoader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <ClCompile Include="MapLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,8 +54,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
 <ClInclude Include="MapLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
