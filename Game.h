@@ -3,6 +3,7 @@
 #include "InputSystem.h"
 #include "Player.h"
 #include "Background.h"
+#include "MapLoader.h"
 
 namespace Sanic {
 
@@ -32,6 +33,8 @@ namespace Sanic {
 
 		Background* background = nullptr;
 		Player* player = nullptr;
+
+		MapLoader* mapLoader;
 
 		bool is_running = true;
 	};
