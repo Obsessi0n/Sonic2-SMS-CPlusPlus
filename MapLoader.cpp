@@ -5,6 +5,7 @@
 #include <iostream>
 #include <filesystem>
 #include <fstream>
+#include <sstream>
 namespace fs = std::filesystem;
 using namespace std;
 
@@ -38,10 +39,25 @@ void Sanic::MapLoader::DrawMap() {
 
 	if (maptxt.is_open())
 	{
+		int x=0, y=0;
+		int spriteSize = 32;
+		int xPos, yPos;
 
 		while (getline(maptxt, line)) {
 			//cout << line << endl;
 			//Draw the tiles
+			yPos = y * 32;
+
+			stringstream X(line);
+			string singleTile;
+			while (getline(X, singleTile, ' ')) {
+				xPos = x * 32;
+				//std::cout << "Tile: " + singleTile << " PosX= " << xPos << "PosY= " << yPos << endl; // print single tile
+				x = x + 1;
+				//Ask to draw singleTile on position (x,y)
+			}
+			y = y + 1;
+			x = 0;
 		}
 		maptxt.close();
 	}
