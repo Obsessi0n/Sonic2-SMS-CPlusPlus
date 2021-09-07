@@ -19,6 +19,8 @@ namespace Sanic {
 		bool isRunning() { return is_running; };
 		void stopRunning() { is_running = false; };
 
+		SDL_Renderer* getRenderer() const { return renderer; };
+
 		const static int SCREEN_WIDTH = 256;
 		const static int SCREEN_HEIGHT = 196;
 	private:
