@@ -2,7 +2,7 @@
 #include <SDL.h>
 #include "Game.h"
 #include "InputSystem.h"
-
+#include "MapLoader.h"
 
 Sanic::Game::Game()
 {
@@ -31,6 +31,7 @@ Sanic::Game::Game()
 
 	is_running = true;
 
+	mapLoader = new MapLoader("W:/GitHub/Sonic-SMS-Cplusplus/DatabaseZone1", "W:/GitHub/Sonic-SMS-Cplusplus/mapLayout.txt");
 }
 
 Sanic::Game::~Game()
@@ -38,6 +39,7 @@ Sanic::Game::~Game()
 	delete player;
 	delete input;
 	delete background;
+	delete mapLoader;
 
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
@@ -62,8 +64,10 @@ void Sanic::Game::update()
 
 void Sanic::Game::render()
 {
+	
 	SDL_RenderClear(renderer);
 	background->DrawBackground(renderer);
+	mapLoader->DrawMap();
 	player->Render(renderer);
 	SDL_RenderPresent(renderer);
 }
