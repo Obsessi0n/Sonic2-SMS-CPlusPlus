@@ -1,33 +1,33 @@
 #pragma once
+#ifndef PLAYER_H
+#define PLAYER_H
 #include <SDL.h>
 #include <SDL_image.h>
+
 namespace Sanic {
 	class Player {
-
 	public:
-		Player(SDL_Renderer* renderer);
+		Player();
 		~Player();
 
 		void TakeDamage();
 		void Move(bool dir);
-		void Render(SDL_Renderer* renderer);
+		void Render();
 
 	private:
+		void Die();
 		const float maxSpeed = 3;
 		const float initialSpeed = 0.0001;
 		float speed = initialSpeed;
 		float acceleration = 0.001;
-		
 
+		int m_x = 0;
+		int m_y = 0;
 
-		int rings;
-		int lives;
+		int rings = 0;
+		int lives = 0;
 
-		const int spriteSize=32;
-
-		SDL_Surface* playerSurf;
-		SDL_Texture* playerTex;
-		void Die();
-		SDL_Rect* playerDestRect;
+		const int spriteSize = 32;
 	};
 }
+#endif

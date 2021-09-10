@@ -1,21 +1,26 @@
-//Using SDL and standard IO
-#include <SDL.h>
-#include <SDL_image.h>
-#include <stdio.h>
 #include "Game.h"
 
-Sanic::Game* game = 0;
+SDL_Window* window;
+SDL_Renderer* renderer;
 //1 sec = 1000ms so 60fps is 1000/60 = 16.6666666667
 const double MS_PER_UPDATE = 16.6666666667;
 
 int main(int argc, char* args[])
 {
-	game = new Sanic::Game();
+	if (Sanic::_Game::Instance()->init("Sanic", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SDL_WINDOW_SHOWN))
+	{
+		std::cout << "Game initialized" << '\n';
+	}
+
+	else {
+		std::cout << "Game failed to initialize." << SDL_GetError() << '\n';
+		return -1;
+	}
 
 	double previous = SDL_GetTicks();
 	double lag = 0.0;
 
-	while (game->isRunning())
+	while (Sanic::_Game::Instance()->isRunning())
 	{
 		double current = SDL_GetTicks();
 		double elapsed = current - previous;
@@ -23,17 +28,15 @@ int main(int argc, char* args[])
 		lag += elapsed;
 
 		while (lag >= MS_PER_UPDATE) {
-			game->handleEvents();
-			game->update();
+			Sanic::_Game::Instance()->handleEvents();
+			Sanic::_Game::Instance()->update();
 			lag -= MS_PER_UPDATE;
-	
 		}
 
-		game->render();
-		
+		Sanic::_Game::Instance()->render();
 	}
 
-	delete game;
+	Sanic::_Game::Instance()->clean();
 
 	return 0;
 }

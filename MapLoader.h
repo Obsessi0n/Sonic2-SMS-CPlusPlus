@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MAPLOADER_H
+#define MAPLOADER_H
 #include <list>
 #include <string>
 #include <SDL.h>
@@ -15,7 +16,8 @@ namespace Sanic {
 		~MapLoader();
 
 		void LoadMapDatabase(std::string act);
-		
+
+		void DrawBackground(SDL_Renderer* renderer);
 		void DrawMap();
 
 	private:
@@ -24,9 +26,7 @@ namespace Sanic {
 		std::string mapLayoutPath;
 		std::list<char unsigned> mapLayout;
 
-
+		SDL_Rect* empty;
 	};
-
-
-
 }
+#endif

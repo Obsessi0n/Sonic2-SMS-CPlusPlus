@@ -6,12 +6,10 @@
 #include <filesystem>
 #include <fstream>
 #include <sstream>
-namespace fs = std::filesystem;
-using namespace std;
 
 Sanic::MapLoader::MapLoader(std::string databasePath, std::string actPath) {
 	//Load database into memory
-	for (const auto& entry : fs::directory_iterator(databasePath)) {
+	for (const auto& entry : std::filesystem::directory_iterator(databasePath)) {
 		
 		//std::cout << entry.path() << std::endl;
 		
@@ -25,17 +23,28 @@ Sanic::MapLoader::MapLoader(std::string databasePath, std::string actPath) {
 
 	//Save map layout txt path
 	mapLayoutPath = actPath;
+
+	empty = new SDL_Rect();
+	empty->x = 0;
+	empty->y = 0;
+	empty->w = 32;
+	empty->h = 32;
 }
 
 Sanic::MapLoader::~MapLoader() {
-	mapDatabase.clear();
-	
+	mapDatabase.clear();	
+}
+
+void Sanic::MapLoader::DrawBackground(SDL_Renderer* renderer)
+{
+	SDL_SetRenderDrawColor(renderer, 82, 170, 173, 255);
+	SDL_RenderFillRect(renderer, empty);
 }
 
 void Sanic::MapLoader::DrawMap() {
 	//Open maplayoutxt
-	string line;
-	ifstream maptxt(mapLayoutPath);
+	std::string line;
+	std::ifstream maptxt(mapLayoutPath);
 
 	if (maptxt.is_open())
 	{
@@ -48,8 +57,8 @@ void Sanic::MapLoader::DrawMap() {
 			//Draw the tiles
 			yPos = y * 32;
 
-			stringstream X(line);
-			string singleTile;
+			std::stringstream X(line);
+			std::string singleTile;
 			while (getline(X, singleTile, ' ')) {
 				xPos = x * 32;
 				//std::cout << "Tile: " + singleTile << " PosX= " << xPos << "PosY= " << yPos << endl; // print single tile
@@ -62,5 +71,5 @@ void Sanic::MapLoader::DrawMap() {
 		maptxt.close();
 	}
 
-	else cout << "Unable to open file";
+	else std::cout << "Unable to open file" << '\n';
 }

@@ -1,9 +1,10 @@
 #include "TextureManager.h"
 #include <iostream>
 
+Sanic::TextureManager* Sanic::TextureManager::instance = 0;
+
 bool Sanic::TextureManager::Load(std::string fileName, std::string id, SDL_Renderer* renderer)
 {
-	renderer = game->getRenderer();
     SDL_Surface* tempSurface = IMG_Load(fileName.c_str());
 	if (tempSurface == nullptr)
 	{
@@ -26,7 +27,6 @@ bool Sanic::TextureManager::Load(std::string fileName, std::string id, SDL_Rende
 
 void Sanic::TextureManager::Draw(std::string id, int x, int y, int w, int h, SDL_Renderer* renderer, SDL_RendererFlip flip)
 {
-	renderer = game->getRenderer();
 	SDL_Rect srcRect, destRect;
 
 	srcRect.x = 0;
@@ -41,8 +41,6 @@ void Sanic::TextureManager::Draw(std::string id, int x, int y, int w, int h, SDL
 
 void Sanic::TextureManager::DrawFrame(std::string id, int x, int y, int w, int h, double scale, int currentRow, int currentFrame, SDL_Renderer* renderer, SDL_RendererFlip flip)
 {
-	renderer = game->getRenderer();
-
 	SDL_Rect srcRect, destRect;
 
 	srcRect.x = w * currentFrame;
