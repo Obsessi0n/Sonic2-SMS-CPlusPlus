@@ -2,6 +2,9 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "Player.h"
+#include "MapLoader.h"
+
 #include <SDL.h>
 #include <iostream>
 
@@ -32,6 +35,9 @@ namespace Sanic {
 		SDL_Renderer* getRenderer() const { return renderer; };
 		SDL_Window* getWindow() const { return window; };
 
+		Player* getPlayer() { return player; };
+		MapLoader* getMapLoader() { return mapLoader; };
+
 		int getScreenWidth() const { return SCREEN_WIDTH; };
 		int getScreenHeight() const { return SCREEN_HEIGHT; };
 
@@ -40,9 +46,11 @@ namespace Sanic {
 
 		Game(){}
 		~Game(){}
-		SDL_Window* window = nullptr;
-		SDL_Surface* screenSurface = nullptr;
-		SDL_Renderer* renderer = nullptr;
+		SDL_Window* window;
+		SDL_Renderer* renderer;
+
+		Player* player;
+		MapLoader* mapLoader;
 
 		const int SCREEN_WIDTH = 256;
 		const int SCREEN_HEIGHT = 196;

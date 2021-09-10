@@ -22,6 +22,9 @@ bool Sanic::Game::init(const char* title, int x, int y, int flags) {
 
 	is_running = true;
 
+	player = new Player;
+	mapLoader = new MapLoader("C:\\Projects\\Sonic2-SMS-CPlusPlus\\DatabaseZone1", "C:\\Projects\\Sonic2-SMS-CPlusPlus\\mapLayout.txt");
+
 	return true;
 }
 
@@ -38,7 +41,8 @@ void Sanic::Game::update()
 void Sanic::Game::render()
 {
 	SDL_RenderClear(renderer);
-	// draw stuff
+	player->Render();
+	mapLoader->DrawBackground(renderer);
 	SDL_RenderPresent(renderer);
 }
 

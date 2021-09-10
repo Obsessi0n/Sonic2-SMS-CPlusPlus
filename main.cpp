@@ -1,7 +1,5 @@
 #include "Game.h"
 
-SDL_Window* window;
-SDL_Renderer* renderer;
 //1 sec = 1000ms so 60fps is 1000/60 = 16.6666666667
 const double MS_PER_UPDATE = 16.6666666667;
 

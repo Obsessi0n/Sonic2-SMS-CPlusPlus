@@ -14,7 +14,7 @@ namespace Sanic {
 			return instance;
 		}
 		
-		void update();
+		bool update();
 
 	private:
 		InputManager() {};
