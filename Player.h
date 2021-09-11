@@ -27,7 +27,8 @@ namespace Sanic {
 		int rings = 0;
 		int lives = 0;
 
-		const int spriteSize = 32;
+		const int spriteSizeX = 18;
+		const int spriteSizeY = 32;
 	};
 }
 #endif

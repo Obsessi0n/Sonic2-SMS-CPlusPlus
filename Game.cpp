@@ -43,8 +43,9 @@ void Sanic::Game::update()
 void Sanic::Game::render()
 {
 	SDL_RenderClear(renderer);
-	player->Render();
 	mapLoader->DrawBackground(renderer);
+	mapLoader->DrawMap();
+	player->Render();
 	SDL_RenderPresent(renderer);
 }
 

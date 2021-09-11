@@ -40,8 +40,6 @@ void Sanic::MapLoader::LoadMapDatabase(std::string databasePath, std::string act
         std::string s = path_string.c_str();
         replace(s.begin(), s.end(), '/', '\\');
 
-
-
         // get filename
         std::string base_filename = s.substr(s.find_last_of("/\\") + 1);
 
@@ -54,6 +52,7 @@ void Sanic::MapLoader::LoadMapDatabase(std::string databasePath, std::string act
         Sanic::_TextureManager::Instance()->Load(("assets/sprites/Zone1/" + base_filename), file_without_extension, Sanic::_Game::Instance()->getRenderer());
 
     }
+    mapLayoutPath = actPath;
     //std::cout << mapDatabase.size() << std::endl;
 }
 
@@ -73,7 +72,7 @@ void Sanic::MapLoader::DrawMap() {
     {
         int x = 0, y = 0;
         int spriteSize = 32;
-        int xPos, yPos;
+        int xPos, yPos, w, h;
 
         while (getline(maptxt, line)) {
             //cout << line << endl;
@@ -85,10 +84,12 @@ void Sanic::MapLoader::DrawMap() {
             while (getline(X, singleTile, ' ')) {
                 xPos = x * 32;
                 //std::cout << "Tile: " + singleTile << " PosX= " << xPos << "PosY= " << yPos << endl; // print single tile
+                Sanic::_TextureManager::Instance()->Draw(singleTile, xPos, yPos, 32, 32, Sanic::_Game::Instance()->getRenderer());
+                //std::cout << "xPos: " << xPos << " " << "yPos: " << yPos << " " << "w: " << w << " " << "h: " << h << '\n';
                 x = x + 1;
                 //Ask to draw singleTile on position (x,y)
-
             }
+           
             y = y + 1;
             x = 0;
         }

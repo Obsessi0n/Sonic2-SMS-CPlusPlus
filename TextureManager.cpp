@@ -35,6 +35,9 @@ void Sanic::TextureManager::Draw(std::string id, int x, int y, int w, int h, SDL
 	srcRect.h = destRect.h = h;
 	destRect.x = x;
 	destRect.y = y;
+	double scale = 1;
+	destRect.w *= scale;
+	destRect.h *= scale;
 
 	SDL_RenderCopyEx(renderer, spritesheet[id], &srcRect, &destRect, 0, nullptr, flip);
 }
