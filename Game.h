@@ -44,7 +44,7 @@ namespace Sanic {
 	private:
 		static Game* instance;
 
-		Game(){}
+		Game() {}
 		~Game(){}
 		SDL_Window* window;
 		SDL_Renderer* renderer;

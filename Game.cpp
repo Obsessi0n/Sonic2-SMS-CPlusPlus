@@ -23,7 +23,9 @@ bool Sanic::Game::init(const char* title, int x, int y, int flags) {
 	is_running = true;
 
 	player = new Player;
-	mapLoader = new MapLoader("C:\\Projects\\Sonic2-SMS-CPlusPlus\\DatabaseZone1", "C:\\Projects\\Sonic2-SMS-CPlusPlus\\mapLayout.txt");
+	mapLoader = new MapLoader();
+
+	mapLoader->LoadMapDatabase("assets/sprites/Zone1", "assets/mapLayout.txt");
 
 	return true;
 }

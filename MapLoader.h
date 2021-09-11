@@ -11,11 +11,11 @@ namespace Sanic {
 
 	public:
 
-		MapLoader(std::string databasePath, std::string actPath);
+		MapLoader();
 
 		~MapLoader();
 
-		void LoadMapDatabase(std::string act);
+		void LoadMapDatabase(std::string databasePath, std::string actPath);
 
 		void DrawBackground(SDL_Renderer* renderer);
 		void DrawMap();
