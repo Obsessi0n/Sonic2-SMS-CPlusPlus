@@ -29,7 +29,7 @@ void Sanic::Player::Move(bool dir) {
 
 	if (dir && roundedSpeed >= 1) {
 		m_x += roundedSpeed;
-		if (m_x > Sanic::_Game::Instance()->getScreenWidth())
+		if (m_x > Sanic::_Game::Instance()->getScreenWidth() - spriteSizeX)
 			m_x = Sanic::_Game::Instance()->getScreenWidth() - spriteSizeX;
 		speed = initialSpeed;
 	}
