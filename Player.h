@@ -12,6 +12,7 @@ namespace Sanic {
 
 		void TakeDamage();
 		void Move(bool dir);
+		void Jump();
 		void Render();
 		void Physics();
 		void Render(int camX, int camY);
@@ -37,10 +38,15 @@ namespace Sanic {
 		int rings = 0;
 		int lives = 0;
 
+		bool isJumping = false;
 		bool isGrounded = false;
+
 		float fallingTimer = 0;
 		const int m_width = 32;
 		const int m_height = 32;
+
+		float jumpVelocity = 0;
+		float jumpForce = 2;
 	};
 }
 #endif

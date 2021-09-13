@@ -4,7 +4,7 @@
 
 Sanic::InputManager* Sanic::InputManager::instance = 0;
 
-bool Sanic::InputManager::update()
+void Sanic::InputManager::update()
 {
 	SDL_Event event;
 	if (SDL_PollEvent(&event))
@@ -16,11 +16,17 @@ bool Sanic::InputManager::update()
 
 		if (event.key.keysym.sym == SDLK_LEFT) {
 			Sanic::_Game::Instance()->getPlayer()->Move(false);
-			return 0;
+			
 		}
 		else if (event.key.keysym.sym == SDLK_RIGHT) {
 			Sanic::_Game::Instance()->getPlayer()->Move(true);
-			return 0;
+			
 		}
+
+		if (event.key.keysym.sym == SDLK_UP) {
+			Sanic::_Game::Instance()->getPlayer()->Jump();
+			
+		}
+
 	}
 }

@@ -53,6 +53,16 @@ void Sanic::Player::Move(bool dir) {
 
 }
 
+
+void Sanic::Player::Jump() {
+	if (!isJumping) {
+		jumpVelocity = jumpForce;
+		isJumping = true;
+	}
+		
+}
+
+
 void Sanic::Player::Physics() {
 	//Physics
 	//Gravity
@@ -68,12 +78,21 @@ void Sanic::Player::Physics() {
 	//Check collision
 	if (Sanic::_Game::Instance()->getMapLoader()->GetBlockCollision(m_x, m_y)) {
 		isGrounded = true;
+		m_y -= jumpVelocity;
 	}
 	else {
-		m_y = newYPOS;
+		m_y = newYPOS - jumpVelocity;
 		isGrounded = false;
 	}
-
+	if (isJumping) {
+		jumpVelocity -= 0.02f;
+		if (jumpVelocity < 0) {
+			jumpVelocity = 0;
+			isJumping = false;
+		}
+			
+	}
+	
 }
 
 void Sanic::Player::Render(int camX, int camY) {
