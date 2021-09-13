@@ -71,5 +71,5 @@ void Sanic::Player::Physics() {
 }
 
 void Sanic::Player::Render(int camX, int camY) {
-	Sanic::_TextureManager::Instance()->DrawFrame("player", (int)m_x - (int)camX, m_y - camY, m_width, m_height, 1, 0, 1, Sanic::_Game::Instance()->getRenderer());
+	Sanic::_TextureManager::Instance()->DrawFrame("player", (int)m_x - camX, (int)m_y - camY, m_width, m_height, 0, 0, 0, Sanic::_Game::Instance()->getRenderer());
 }
