@@ -46,5 +46,5 @@ void Sanic::Player::Move(bool dir) {
 }
 
 void Sanic::Player::Render(int camX, int camY) {
-	Sanic::_TextureManager::Instance()->Draw("player", m_x - camX, m_y - camY, m_width, m_height, 1, Sanic::_Game::Instance()->getRenderer());
+	Sanic::_TextureManager::Instance()->DrawFrame("player", m_x - camX, m_y - camY, m_width, m_height, 1, 0, 1, Sanic::_Game::Instance()->getRenderer());
 }

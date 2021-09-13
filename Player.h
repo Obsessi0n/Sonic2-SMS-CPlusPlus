@@ -35,7 +35,7 @@ namespace Sanic {
 		int rings = 0;
 		int lives = 0;
 
-		const int m_width = 18;
+		const int m_width = 32;
 		const int m_height = 32;
 	};
 }
