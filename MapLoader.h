@@ -18,7 +18,7 @@ namespace Sanic {
 		void LoadMapDatabase(std::string databasePath, std::string actPath);
 
 		void DrawBackground(SDL_Renderer* renderer);
-		void DrawMap();
+		void DrawMap(int camX, int camY);
 
 	private:
 

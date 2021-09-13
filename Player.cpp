@@ -9,8 +9,9 @@ Sanic::Player::Player() {
 
 	Sanic::_TextureManager::Instance()->Load("assets/sprites/player/player.png", "player", Sanic::_Game::Instance()->getRenderer());
 
-	m_x = _Game::Instance()->getScreenWidth() / 2 - (32 / 2);
-	m_y = _Game::Instance()->getScreenWidth() / 2 - (32 / 2) + 48;
+	m_x = Sanic::_Game::Instance()->getScreenWidth() / 2 - (m_width / 2);
+
+	m_y = Sanic::_Game::Instance()->getScreenWidth() / 2 - (m_width / 2) + 40;
 }
 
 Sanic::Player::~Player() {
@@ -29,8 +30,8 @@ void Sanic::Player::Move(bool dir) {
 
 	if (dir && roundedSpeed >= 1) {
 		m_x += roundedSpeed;
-		if (m_x > Sanic::_Game::Instance()->getScreenWidth() - spriteSizeX)
-			m_x = Sanic::_Game::Instance()->getScreenWidth() - spriteSizeX;
+		if (m_x > Sanic::_Game::Instance()->getLevelWidth() - m_width)
+			m_x = Sanic::_Game::Instance()->getLevelWidth() - m_width;
 		speed = initialSpeed;
 	}
 	else if (!dir && roundedSpeed >= 1)
@@ -44,6 +45,6 @@ void Sanic::Player::Move(bool dir) {
 	//Decelarating, still to be implemented.
 }
 
-void Sanic::Player::Render() {
-	Sanic::_TextureManager::Instance()->Draw("player", m_x, m_y, spriteSizeX, spriteSizeY, Sanic::_Game::Instance()->getRenderer());
+void Sanic::Player::Render(int camX, int camY) {
+	Sanic::_TextureManager::Instance()->Draw("player", m_x - camX, m_y - camY, m_width, m_height, 1, Sanic::_Game::Instance()->getRenderer());
 }

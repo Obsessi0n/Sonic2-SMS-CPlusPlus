@@ -12,7 +12,15 @@ namespace Sanic {
 
 		void TakeDamage();
 		void Move(bool dir);
-		void Render();
+		void Render(int camX, int camY);
+
+		int getPosX() { return m_x; };
+		int getPosY() { return m_y; };
+
+		int getSpeed() { return speed; };
+
+		int getWidth() { return m_width; };
+		int getHeight() { return m_height; };
 
 	private:
 		void Die();
@@ -27,8 +35,8 @@ namespace Sanic {
 		int rings = 0;
 		int lives = 0;
 
-		const int spriteSizeX = 18;
-		const int spriteSizeY = 32;
+		const int m_width = 18;
+		const int m_height = 32;
 	};
 }
 #endif

@@ -41,6 +41,11 @@ namespace Sanic {
 		int getScreenWidth() const { return SCREEN_WIDTH; };
 		int getScreenHeight() const { return SCREEN_HEIGHT; };
 
+		int getLevelWidth() const { return level_width; };
+		int getLevelHeight() const { return level_height; };
+
+		SDL_Rect camera;
+
 	private:
 		static Game* instance;
 
@@ -55,6 +60,8 @@ namespace Sanic {
 		const int SCREEN_WIDTH = 256;
 		const int SCREEN_HEIGHT = 196;
 
+		int level_width = 5376;
+		int level_height = 768;
 
 		bool is_running = true;
 	};
