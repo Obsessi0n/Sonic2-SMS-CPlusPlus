@@ -77,10 +77,10 @@ void Sanic::MapLoader::LoadMapDatabase(std::string databasePath, std::string act
 }
 
 
-void Sanic::MapLoader::DrawBackground(SDL_Renderer* renderer)
+void Sanic::MapLoader::DrawBackground()
 {
-    SDL_SetRenderDrawColor(renderer, 82, 170, 173, 255);
-    SDL_RenderFillRect(renderer, empty);
+    SDL_SetRenderDrawColor(Sanic::_Game::Instance()->getRenderer(), 82, 170, 173, 255);
+    SDL_RenderFillRect(Sanic::_Game::Instance()->getRenderer(), empty);
 }
 
 void Sanic::MapLoader::DrawMap(int camX, int camY) {

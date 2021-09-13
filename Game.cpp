@@ -67,7 +67,7 @@ void Sanic::Game::update()
 void Sanic::Game::render()
 {
 	SDL_RenderClear(renderer);
-	mapLoader->DrawBackground(renderer);
+	mapLoader->DrawBackground();
 	mapLoader->DrawMap(camera.x, camera.y);
 	player->Render(camera.x, camera.y);
 	SDL_RenderPresent(renderer);
