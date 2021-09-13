@@ -16,7 +16,6 @@ Sanic::Player::Player() {
 }
 
 Sanic::Player::~Player() {
-	
 }
 
 void Sanic::Player::Move(bool dir) {
@@ -30,9 +29,8 @@ void Sanic::Player::Move(bool dir) {
 	int roundedSpeed = std::roundf(speed);
 
 	if (dir && roundedSpeed >= 1) {
-		if(!Sanic::_Game::Instance()->getMapLoader()->GetBlockCollision(m_x + roundedSpeed, m_y-2))
+		if (!Sanic::_Game::Instance()->getMapLoader()->GetBlockCollision(m_x + roundedSpeed, m_y - 2))
 			m_x += roundedSpeed;
-
 
 		if (m_x > Sanic::_Game::Instance()->getLevelWidth() - m_width)
 			m_x = Sanic::_Game::Instance()->getLevelWidth() - m_width;
@@ -40,35 +38,30 @@ void Sanic::Player::Move(bool dir) {
 	}
 	else if (!dir && roundedSpeed >= 1)
 	{
-		if (!Sanic::_Game::Instance()->getMapLoader()->GetBlockCollision(m_x -roundedSpeed, m_y-2))
+		if (!Sanic::_Game::Instance()->getMapLoader()->GetBlockCollision(m_x - roundedSpeed, m_y - 2))
 			m_x -= roundedSpeed;
 
 		if (m_x < 0)
-			m_x = 0+0.001f;
+			m_x = 0 + 0.001f;
 
 		speed = initialSpeed;
 	}
 
 	//Decelarating, still to be implemented.
-
 }
-
 
 void Sanic::Player::Jump() {
 	if (!isJumping) {
 		jumpVelocity = jumpForce;
 		isJumping = true;
 	}
-		
 }
-
 
 void Sanic::Player::Physics() {
 	//Physics
 	//Gravity
 	if (!isGrounded) {
-		fallingTimer++;	
-
+		fallingTimer++;
 	}
 	else
 		fallingTimer = 0;
@@ -90,9 +83,7 @@ void Sanic::Player::Physics() {
 			jumpVelocity = 0;
 			isJumping = false;
 		}
-			
 	}
-	
 }
 
 void Sanic::Player::Render(int camX, int camY) {

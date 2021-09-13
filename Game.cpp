@@ -34,7 +34,7 @@ bool Sanic::Game::init(const char* title, int x, int y, int flags) {
 
 void Sanic::Game::handleEvents()
 {
-	Sanic::_InputManager::Instance()->update();
+	Sanic::_InputManager::Instance()->HandleInput();
 }
 
 void Sanic::Game::update()

@@ -1,6 +1,7 @@
 #pragma once
 #ifndef INPUTMANAGER_H
 #define INPUTMANAGER_H
+#include "Command.h"
 #include "SDL.h"
 
 namespace Sanic {
@@ -14,11 +15,15 @@ namespace Sanic {
 			return instance;
 		}
 		
-		void update();
+		void HandleInput();
 
 	private:
 		InputManager() {};
 		~InputManager() {};
+
+		Command* arrowUp_ = new JumpCommand;
+		Command* arrowLeft_ = new MoveLeftCommand;
+		Command* arrowRight_ = new MoveRightCommand;
 
 		static InputManager* instance;
 	};

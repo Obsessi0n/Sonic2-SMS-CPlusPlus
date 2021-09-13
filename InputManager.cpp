@@ -4,29 +4,26 @@
 
 Sanic::InputManager* Sanic::InputManager::instance = 0;
 
-void Sanic::InputManager::update()
+void Sanic::InputManager::HandleInput()
 {
 	SDL_Event event;
+	const Uint8* currentKeyStates = SDL_GetKeyboardState(NULL);
+
 	if (SDL_PollEvent(&event))
 	{
 		if (event.type == SDL_QUIT)
-		{
 			_Game::Instance()->quit();
+
+		if (currentKeyStates[SDL_SCANCODE_UP]) {
+			arrowUp_->execute();
 		}
 
-		if (event.key.keysym.sym == SDLK_LEFT) {
-			Sanic::_Game::Instance()->getPlayer()->Move(false);
-			
-		}
-		else if (event.key.keysym.sym == SDLK_RIGHT) {
-			Sanic::_Game::Instance()->getPlayer()->Move(true);
-			
+		if (currentKeyStates[SDL_SCANCODE_LEFT]) {
+			arrowLeft_->execute();
 		}
 
-		if (event.key.keysym.sym == SDLK_UP) {
-			Sanic::_Game::Instance()->getPlayer()->Jump();
-			
+		if (currentKeyStates[SDL_SCANCODE_RIGHT]) {
+			arrowRight_->execute();
 		}
-
 	}
 }
