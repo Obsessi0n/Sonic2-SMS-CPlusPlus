@@ -21,21 +21,17 @@ Sanic::MapLoader::MapLoader() {
 }
 
 Sanic::MapLoader::~MapLoader() {
-    mapDatabase.clear();
+    mapLayoutData.clear();
 }
 
 void Sanic::MapLoader::LoadMapDatabase(std::string databasePath, std::string actPath) {
 
-    //Load database into memory
+    //Send sprites to textureManager
     for (const auto& entry : std::filesystem::directory_iterator(databasePath)) {
 
-        //std::cout << entry.path() << std::endl;
+
 
         std::string path_string{ entry.path().u8string() };
-
-        //const char* path = path_string.c_str();
-
-        //mapDatabase.push_back(IMG_Load(path));    
 
         std::string s = path_string.c_str();
         replace(s.begin(), s.end(), '/', '\\');
@@ -52,8 +48,32 @@ void Sanic::MapLoader::LoadMapDatabase(std::string databasePath, std::string act
         Sanic::_TextureManager::Instance()->Load(("assets/sprites/Zone1/" + base_filename), file_without_extension, Sanic::_Game::Instance()->getRenderer());
 
     }
+    //Save maplayoutpath;
     mapLayoutPath = actPath;
-    //std::cout << mapDatabase.size() << std::endl;
+
+    //Save mapTilesInfo into memory
+    //Open maplayoutxt
+    std::string line;
+    std::ifstream maptxt(mapLayoutPath);
+    vector<string> tempLine;
+
+    if (maptxt.is_open())
+    {
+        while (getline(maptxt, line)) {
+            std::stringstream X(line);
+            std::string singleTile;
+            while (getline(X, singleTile, ' ')) {
+                tempLine.push_back(singleTile);
+            }
+            mapLayoutData.push_back(tempLine);
+            tempLine.clear();
+        }
+
+        maptxt.close();
+    }
+
+    else std::cout << "Unable to open file" << mapLayoutPath << '\n';
+    
 }
 
 
@@ -75,26 +95,46 @@ void Sanic::MapLoader::DrawMap() {
         int xPos, yPos, w, h;
 
         while (getline(maptxt, line)) {
-            //cout << line << endl;
-            //Draw the tiles
+
             yPos = y * 32;
 
             std::stringstream X(line);
             std::string singleTile;
-            while (getline(X, singleTile, ' ')) {
+
+            while (getline(X, singleTile, ' ')) {               
+
                 xPos = x * 32;
-                //std::cout << "Tile: " + singleTile << " PosX= " << xPos << "PosY= " << yPos << endl; // print single tile
-                Sanic::_TextureManager::Instance()->Draw(singleTile, xPos, yPos, 32, 32, Sanic::_Game::Instance()->getRenderer());
-                //std::cout << "xPos: " << xPos << " " << "yPos: " << yPos << " " << "w: " << w << " " << "h: " << h << '\n';
-                x = x + 1;
                 //Ask to draw singleTile on position (x,y)
-            }
-           
+                Sanic::_TextureManager::Instance()->Draw(singleTile, xPos, yPos, 32, 32, Sanic::_Game::Instance()->getRenderer());
+                x = x + 1;                
+            }          
+
             y = y + 1;
             x = 0;
         }
+
         maptxt.close();
     }
 
     else std::cout << "Unable to open file" << '\n';
+}
+
+bool Sanic::MapLoader::GetBlockCollision(int x, int y) {
+
+    int xBlock = x / 32;
+    int yBlock = y / 32;
+
+    std::string block = mapLayoutData[yBlock+1][xBlock];
+
+    std::string line;
+    std::ifstream maptxt(collisionsPath);
+
+    while (getline(maptxt, line)) {
+        if (line == block) {
+            return true;
+            break;
+        }          
+    }
+
+    return false;
 }

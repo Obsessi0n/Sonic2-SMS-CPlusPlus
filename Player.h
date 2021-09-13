@@ -13,6 +13,7 @@ namespace Sanic {
 		void TakeDamage();
 		void Move(bool dir);
 		void Render();
+		void Physics();
 
 	private:
 		void Die();
@@ -21,11 +22,14 @@ namespace Sanic {
 		float speed = initialSpeed;
 		float acceleration = 0.001;
 
-		int m_x = 0;
-		int m_y = 0;
+		float m_x = 0;
+		float m_y = 0;
 
 		int rings = 0;
 		int lives = 0;
+
+		bool isGrounded = false;
+		float fallingTimer = 0;
 
 		const int spriteSizeX = 18;
 		const int spriteSizeY = 32;

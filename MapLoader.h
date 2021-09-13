@@ -3,7 +3,10 @@
 #include <list>
 #include <string>
 #include <SDL.h>
+#include <string>
 
+#include <vector>
+using namespace std;
 
 namespace Sanic {
 
@@ -20,13 +23,19 @@ namespace Sanic {
 		void DrawBackground(SDL_Renderer* renderer);
 		void DrawMap();
 
+		bool GetBlockCollision(int x, int y);
+
 	private:
 
-		std::list<SDL_Surface*> mapDatabase;
+		vector<vector<string>> mapLayoutData;
+
+		//std::list<SDL_Surface*> mapDatabase;
 		std::string mapLayoutPath;
-		std::list<char unsigned> mapLayout;
+		//std::list<char unsigned> mapLayout;
 
 		SDL_Rect* empty;
+
+		const std::string collisionsPath = "assets/blocksCollisions.txt";
 	};
 }
 #endif

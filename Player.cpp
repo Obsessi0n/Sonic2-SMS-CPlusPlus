@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Game.h"
 #include "TextureManager.h"
+#include "PhysicsManager.h"
 
 Sanic::Player::Player() {
 	lives = 3;
@@ -10,7 +11,7 @@ Sanic::Player::Player() {
 	Sanic::_TextureManager::Instance()->Load("assets/sprites/player/player.png", "player", Sanic::_Game::Instance()->getRenderer());
 
 	m_x = _Game::Instance()->getScreenWidth() / 2 - (32 / 2);
-	m_y = _Game::Instance()->getScreenWidth() / 2 - (32 / 2) + 48;
+	m_y = _Game::Instance()->getScreenWidth() / 2 - (32 / 2) -60 ;
 }
 
 Sanic::Player::~Player() {
@@ -42,8 +43,32 @@ void Sanic::Player::Move(bool dir) {
 	}
 
 	//Decelarating, still to be implemented.
+
+}
+
+void Sanic::Player::Physics() {
+	//Physics
+	//Gravity
+	if (!isGrounded) {
+		fallingTimer++;	
+
+	}
+	else
+		fallingTimer = 0;
+
+	float newYPOS = m_y + Sanic::_PhysicsManager::Instance()->CalculateGravityForce(fallingTimer);
+
+	//Check collision
+	if (Sanic::_Game::Instance()->getMapLoader()->GetBlockCollision(m_x, m_y)) {
+		isGrounded = true;
+	}
+	else {
+		m_y = newYPOS;
+		isGrounded = false;
+	}
+
 }
 
 void Sanic::Player::Render() {
-	Sanic::_TextureManager::Instance()->Draw("player", m_x, m_y, spriteSizeX, spriteSizeY, Sanic::_Game::Instance()->getRenderer());
+	Sanic::_TextureManager::Instance()->Draw("player", (int)m_x, (int)m_y, spriteSizeX, spriteSizeY, Sanic::_Game::Instance()->getRenderer());
 }

@@ -38,6 +38,7 @@ void Sanic::Game::handleEvents()
 void Sanic::Game::update()
 {
 	// update player position etc
+	player->Physics();
 }
 
 void Sanic::Game::render()
@@ -53,6 +54,8 @@ void Sanic::Game::clean()
 {
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
+	delete(mapLoader);
+	delete(player);
 	SDL_Quit();
 }
 
