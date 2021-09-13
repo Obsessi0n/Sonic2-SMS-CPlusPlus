@@ -20,7 +20,7 @@ namespace Sanic {
 
 		void LoadMapDatabase(std::string databasePath, std::string actPath);
 
-		void DrawBackground(SDL_Renderer* renderer);
+		void DrawBackground();
 		void DrawMap(int camX, int camY);
 
 		bool GetBlockCollision(int x, int y);
