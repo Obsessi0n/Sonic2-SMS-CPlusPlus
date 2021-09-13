@@ -25,7 +25,7 @@ bool Sanic::TextureManager::Load(std::string fileName, std::string id, SDL_Rende
     return false;
 }
 
-void Sanic::TextureManager::Draw(std::string id, int x, int y, int w, int h, SDL_Renderer* renderer, SDL_RendererFlip flip)
+void Sanic::TextureManager::Draw(std::string id, int x, int y, int w, int h, double scale, SDL_Renderer* renderer, SDL_RendererFlip flip)
 {
 	SDL_Rect srcRect, destRect;
 
@@ -35,11 +35,10 @@ void Sanic::TextureManager::Draw(std::string id, int x, int y, int w, int h, SDL
 	srcRect.h = destRect.h = h;
 	destRect.x = x;
 	destRect.y = y;
-	double scale = 1;
 	destRect.w *= scale;
 	destRect.h *= scale;
 
-	SDL_RenderCopyEx(renderer, spritesheet[id], &srcRect, &destRect, 0, nullptr, flip);
+	SDL_RenderCopyEx(renderer, spritesheet[id], &srcRect, &destRect, scale, nullptr, flip);
 }
 
 void Sanic::TextureManager::DrawFrame(std::string id, int x, int y, int w, int h, double scale, int currentRow, int currentFrame, SDL_Renderer* renderer, SDL_RendererFlip flip)

@@ -83,7 +83,7 @@ void Sanic::MapLoader::DrawBackground(SDL_Renderer* renderer)
     SDL_RenderFillRect(renderer, empty);
 }
 
-void Sanic::MapLoader::DrawMap() {
+void Sanic::MapLoader::DrawMap(int camX, int camY) {
     //Open maplayoutxt
     std::string line;
     std::ifstream maptxt(mapLayoutPath);
@@ -95,20 +95,16 @@ void Sanic::MapLoader::DrawMap() {
         int xPos, yPos, w, h;
 
         while (getline(maptxt, line)) {
-
             yPos = y * 32;
-
             std::stringstream X(line);
             std::string singleTile;
 
             while (getline(X, singleTile, ' ')) {               
 
                 xPos = x * 32;
-                //Ask to draw singleTile on position (x,y)
-                Sanic::_TextureManager::Instance()->Draw(singleTile, xPos, yPos, 32, 32, Sanic::_Game::Instance()->getRenderer());
-                x = x + 1;                
-            }          
-
+                Sanic::_TextureManager::Instance()->Draw(singleTile, xPos - camX, yPos - camY, 32, 32, 1, Sanic::_Game::Instance()->getRenderer());
+                x = x + 1;
+            }
             y = y + 1;
             x = 0;
         }

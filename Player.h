@@ -14,6 +14,15 @@ namespace Sanic {
 		void Move(bool dir);
 		void Render();
 		void Physics();
+		void Render(int camX, int camY);
+
+		int getPosX() { return m_x; };
+		int getPosY() { return m_y; };
+
+		int getSpeed() { return speed; };
+
+		int getWidth() { return m_width; };
+		int getHeight() { return m_height; };
 
 	private:
 		void Die();
@@ -30,9 +39,8 @@ namespace Sanic {
 
 		bool isGrounded = false;
 		float fallingTimer = 0;
-
-		const int spriteSizeX = 18;
-		const int spriteSizeY = 32;
+		const int m_width = 32;
+		const int m_height = 32;
 	};
 }
 #endif

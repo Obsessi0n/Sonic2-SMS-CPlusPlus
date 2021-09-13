@@ -22,6 +22,8 @@ bool Sanic::Game::init(const char* title, int x, int y, int flags) {
 
 	is_running = true;
 
+	camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+
 	player = new Player;
 	mapLoader = new MapLoader();
 
@@ -37,16 +39,37 @@ void Sanic::Game::handleEvents()
 
 void Sanic::Game::update()
 {
-	// update player position etc
 	player->Physics();
+	camera.x = (player->getPosX() + player->getWidth() / 2) - SCREEN_WIDTH / 2;
+	camera.y = (player->getPosY() + player->getHeight() / 2) - SCREEN_HEIGHT / 2;
+
+	if (camera.x < 0)
+	{
+		camera.x = 0;
+	}
+
+	if (camera.y < 0)
+	{
+		camera.y = 0;
+	}
+
+	if (camera.x > level_width - camera.w)
+	{
+		camera.x = level_width - camera.w;
+	}
+
+	if (camera.y > level_height - camera.h)
+	{
+		camera.y = level_height - camera.h;
+	}
 }
 
 void Sanic::Game::render()
 {
 	SDL_RenderClear(renderer);
 	mapLoader->DrawBackground(renderer);
-	mapLoader->DrawMap();
-	player->Render();
+	mapLoader->DrawMap(camera.x, camera.y);
+	player->Render(camera.x, camera.y);
 	SDL_RenderPresent(renderer);
 }
 
