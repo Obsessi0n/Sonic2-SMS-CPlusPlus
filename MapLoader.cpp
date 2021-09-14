@@ -140,3 +140,24 @@ bool Sanic::MapLoader::GetBlockCollision(int x, int y) {
 
     return false;
 }
+
+bool Sanic::MapLoader::IsTileSolid(int x, int y) {
+
+
+    if (y + 2 > mapLayoutData.size())
+        return true;
+
+
+    std::string block = mapLayoutData[y][x];
+
+    std::string line;
+    std::ifstream maptxt(collisionsPath);
+
+    while (getline(maptxt, line)) {
+        if (line == block) {
+            return true;
+            break;
+        }
+    }
+    return false;
+}

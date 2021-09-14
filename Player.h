@@ -46,7 +46,7 @@ namespace Sanic {
 		const int m_height = 32;
 
 		float jumpVelocity = 0;
-		float jumpForce = 2;
+		float jumpForce = 3;
 	};
 }
 #endif

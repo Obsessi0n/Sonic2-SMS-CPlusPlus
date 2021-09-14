@@ -20,7 +20,7 @@ namespace Sanic {
 		~PhysicsManager();
 
 		float CalculateGravityForce(float _fallingTimer);
-
+		bool IsColliding(int x, int y);
 
 	private:
 		static PhysicsManager* instance;

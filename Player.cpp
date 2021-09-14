@@ -61,32 +61,47 @@ void Sanic::Player::Jump() {
 }
 
 void Sanic::Player::Physics() {
-	//Physics
-	//Gravity
+
+	float newYPOS= m_y;
+	float gravityForce = 0;
+
+
+	//First we check if the player is grounded!
+	if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x, m_y + 32))
+		isGrounded = true;
+	else
+		isGrounded = false;
+
+
+	//Calculating the gravity.
 	if (!isGrounded) {
 		fallingTimer++;
-	}
-	else
-		fallingTimer = 0;
-
-	float newYPOS = m_y + Sanic::_PhysicsManager::Instance()->CalculateGravityForce(fallingTimer);
-
-	//Check collision
-	if (Sanic::_Game::Instance()->getMapLoader()->GetBlockCollision(m_x, m_y)) {
-		isGrounded = true;
-		m_y -= jumpVelocity;
+		gravityForce = Sanic::_PhysicsManager::Instance()->CalculateGravityForce(fallingTimer);
 	}
 	else {
-		m_y = newYPOS - jumpVelocity;
-		isGrounded = false;
+		fallingTimer = 0;
+		gravityForce = 0;
 	}
+	
+	//We check if our head is banging on a tile
+	if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x, m_y - 5)) 
+		jumpVelocity = 0;
+
+		
+
+
+	//We decrease the jump velocity with time
 	if (isJumping) {
-		jumpVelocity -= 0.02f;
+		jumpVelocity -= 0.04f;
 		if (jumpVelocity < 0) {
 			jumpVelocity = 0;
 			isJumping = false;
 		}
 	}
+	
+	//Finaly we aply the movement
+	m_y = m_y + gravityForce - jumpVelocity;
+
 }
 
 void Sanic::Player::Render(int camX, int camY) {
