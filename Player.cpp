@@ -19,36 +19,50 @@ Sanic::Player::~Player() {
 }
 
 void Sanic::Player::Move(bool dir) {
-	//Accelerating
-	speed += acceleration;
-	acceleration += acceleration;
 
-	if (acceleration > maxSpeed)
-		acceleration = maxSpeed;
+	float newXPOS = m_x;
 
-	int roundedSpeed = std::roundf(speed);
+	//Calculate acceleration
+	currentAcceleration += acceleration;
+	if (currentAcceleration > maxSpeed)
+		currentAcceleration = maxSpeed;
+
+	speed = 1;
 
 	//Added an offset of 16 to x and y because we don't have a player collission box yet (DIRTY HACK)
 
-	if (dir && roundedSpeed >= 1) {
+	if (dir) {
 		
-		if (!Sanic::_Game::Instance()->getMapLoader()->GetBlockCollision(m_x + roundedSpeed+16, m_y - 16))
-			m_x += roundedSpeed;
+		if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x + speed + 16, m_y+16)) {
+			currentAcceleration = 0;
+			speed = 0;
+		}		
 
 		if (m_x > Sanic::_Game::Instance()->getLevelWidth() - m_width)
 			m_x = Sanic::_Game::Instance()->getLevelWidth() - m_width;
-		speed = initialSpeed;
+
+		//speed = initialSpeed;
+		
 	}
-	else if (!dir && roundedSpeed >= 1)
+	else if (!dir)
 	{
-		if (!Sanic::_Game::Instance()->getMapLoader()->GetBlockCollision(m_x - roundedSpeed, m_y - 16))
-			m_x -= roundedSpeed;
+		speed = -speed;
+		if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x - speed-5, m_y + 16)) {
+			speed = 0;
+			currentAcceleration = 0;
+		}
+			
 
-		if (m_x < 0)
-			m_x = 0 + 0.001f;
+		if (m_x <= 0.1f) // If m_x <0 we have a catastrophic failure!
+			m_x = 0.1f;
 
-		speed = initialSpeed;
+		//speed = initialSpeed;
 	}
+
+	cout << speed * currentAcceleration << '\n';
+	newXPOS += speed * currentAcceleration;
+
+	m_x = newXPOS;
 
 	//Decelarating, still to be implemented.
 }
@@ -61,6 +75,7 @@ void Sanic::Player::Jump() {
 }
 
 void Sanic::Player::Physics() {
+
 
 	float newYPOS= m_y;
 	float gravityForce = 0;

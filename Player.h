@@ -30,7 +30,8 @@ namespace Sanic {
 		const float maxSpeed = 3;
 		const float initialSpeed = 0.0001;
 		float speed = initialSpeed;
-		float acceleration = 0.001;
+		const float acceleration = 0.1;
+		float currentAcceleration = acceleration;
 
 		float m_x = 0;
 		float m_y = 0;
