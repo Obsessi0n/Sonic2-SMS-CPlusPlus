@@ -54,7 +54,7 @@ void Sanic::Player::Move(bool dir) {
 }
 
 void Sanic::Player::Jump() {
-	if (!isJumping) {
+	if (!isJumping && isGrounded) {
 		jumpVelocity = jumpForce;
 		isJumping = true;
 	}
