@@ -4,6 +4,7 @@
 
 #include "Player.h"
 #include "MapLoader.h"
+#include "Interface.h"
 
 #include <SDL.h>
 #include <iostream>
@@ -56,6 +57,7 @@ namespace Sanic {
 
 		Player* player;
 		MapLoader* mapLoader;
+		Interface* interface;
 
 		const int SCREEN_WIDTH = 256;
 		const int SCREEN_HEIGHT = 196;

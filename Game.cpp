@@ -26,6 +26,7 @@ bool Sanic::Game::init(const char* title, int x, int y, int flags) {
 
 	player = new Player;
 	mapLoader = new MapLoader();
+	interface = new Interface();
 
 	mapLoader->LoadMapDatabase("assets/sprites/Zone1", "assets/mapLayout.txt");
 
@@ -69,6 +70,7 @@ void Sanic::Game::render()
 	SDL_RenderClear(renderer);
 	mapLoader->DrawBackground();
 	mapLoader->DrawMap(camera.x, camera.y);
+	interface->Render();
 	player->Render(camera.x, camera.y);
 	SDL_RenderPresent(renderer);
 }
