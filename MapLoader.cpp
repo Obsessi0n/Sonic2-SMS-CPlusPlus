@@ -117,6 +117,9 @@ void Sanic::MapLoader::DrawMap(int camX, int camY) {
 
 bool Sanic::MapLoader::GetBlockCollision(int x, int y) {
 
+
+    //Collision should move to physics and we use this just to retrieve map info
+
     int xBlock = x / 32;
     int yBlock = y / 32;
 

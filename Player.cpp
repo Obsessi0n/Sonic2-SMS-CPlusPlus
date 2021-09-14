@@ -28,8 +28,11 @@ void Sanic::Player::Move(bool dir) {
 
 	int roundedSpeed = std::roundf(speed);
 
+	//Added an offset of 16 to x and y because we don't have a player collission box yet (DIRTY HACK)
+
 	if (dir && roundedSpeed >= 1) {
-		if (!Sanic::_Game::Instance()->getMapLoader()->GetBlockCollision(m_x + roundedSpeed, m_y - 2))
+		
+		if (!Sanic::_Game::Instance()->getMapLoader()->GetBlockCollision(m_x + roundedSpeed+16, m_y - 16))
 			m_x += roundedSpeed;
 
 		if (m_x > Sanic::_Game::Instance()->getLevelWidth() - m_width)
@@ -38,7 +41,7 @@ void Sanic::Player::Move(bool dir) {
 	}
 	else if (!dir && roundedSpeed >= 1)
 	{
-		if (!Sanic::_Game::Instance()->getMapLoader()->GetBlockCollision(m_x - roundedSpeed, m_y - 2))
+		if (!Sanic::_Game::Instance()->getMapLoader()->GetBlockCollision(m_x - roundedSpeed, m_y - 16))
 			m_x -= roundedSpeed;
 
 		if (m_x < 0)
