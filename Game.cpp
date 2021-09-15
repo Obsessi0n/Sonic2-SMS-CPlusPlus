@@ -41,7 +41,7 @@ void Sanic::Game::handleEvents()
 
 void Sanic::Game::update()
 {
-	player->Physics();
+	player->Update();
 	camera.x = (player->getPosX() + player->getWidth() / 2) - RES_WIDTH / 2;
 	camera.y = (player->getPosY() + player->getHeight() / 2) - RES_HEIGHT / 2;
 
@@ -81,6 +81,7 @@ void Sanic::Game::clean()
 	SDL_DestroyWindow(window);
 	SDL_DestroyRenderer(renderer);
 	delete(mapLoader);
+	delete(interface);
 	delete(player);
 	SDL_Quit();
 }

@@ -55,6 +55,11 @@ void Sanic::Entity::Physics()
 	m_y = m_y + gravityForce - jumpVelocity;
 }
 
+void Sanic::Entity::Update()
+{
+	Physics();
+}
+
 void Sanic::Entity::Render(std::string id, int camX, int camY)
 {
 	Sanic::_TextureManager::Instance()->DrawFrame(id, (int)m_x - camX, (int)m_y - camY, m_width, m_height, 0, 0, 0, Sanic::_Game::Instance()->getRenderer());

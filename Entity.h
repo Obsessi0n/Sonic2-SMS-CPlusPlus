@@ -7,6 +7,7 @@ namespace Sanic {
 	public:
 		virtual void Move(bool dir);
 		virtual void Physics();
+		void Update();
 		virtual void Render(std::string id, int camX, int camY);
 		virtual void Destroy();
 	protected:

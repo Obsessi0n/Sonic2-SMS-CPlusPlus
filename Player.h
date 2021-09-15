@@ -15,6 +15,7 @@ namespace Sanic {
 		void Move(bool dir) override;
 		void Jump();
 		void Physics() override;
+		void Update();
 		void Render(std::string id, int camX, int camY) override;
 
 		int getPosX() { return m_x; };
