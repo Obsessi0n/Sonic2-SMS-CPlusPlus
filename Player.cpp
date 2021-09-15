@@ -139,6 +139,7 @@ void Sanic::Player::Physics() {
 
 void Sanic::Player::Update()
 {
+	Move();
 	Physics();
 }
 
