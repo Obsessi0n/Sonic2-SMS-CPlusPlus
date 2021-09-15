@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <SDL.h>
 namespace Sanic {
 	class Entity
 	{
@@ -13,6 +14,8 @@ namespace Sanic {
 		float m_y = 0;
 		const int m_width = 32;
 		const int m_height = 32;
+
+		SDL_Rect collisionBox{ (int)m_x, (int)m_y, 0, 0 };
 
 		bool isJumping = false;
 		bool isGrounded = false;
