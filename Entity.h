@@ -13,8 +13,8 @@ namespace Sanic {
 	protected:
 		float m_x = 0;
 		float m_y = 0;
-		const int m_width = 32;
-		const int m_height = 32;
+		int m_width = 32;
+		int m_height = 32;
 
 		SDL_Rect collisionBox{ (int)m_x, (int)m_y, 0, 0 };
 
