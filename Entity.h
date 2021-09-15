@@ -8,8 +8,14 @@ namespace Sanic {
 		virtual void Move();
 		virtual void Physics();
 		void Update();
-		virtual void Render(std::string id, int camX, int camY);
+		virtual void Render(int camX, int camY);
 		virtual void Destroy();
+
+		int getX() { return m_x; };
+		int getY() { return m_y; };
+
+		void setX(int x) { m_x = x; };
+		void setY(int y) { m_y = y; };
 	protected:
 		float m_x = 0;
 		float m_y = 0;

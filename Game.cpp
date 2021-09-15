@@ -28,6 +28,14 @@ bool Sanic::Game::init(const char* title, int x, int y, int flags) {
 	mapLoader = new MapLoader();
 	interface = new Interface();
 
+	for (int i = 0; i < 5; ++i) {
+		rings.push_back(new Ring());
+	}
+	rings[0]->setX(16 * 10);
+	rings[0]->setY(16 * 10);
+	rings[1]->setX(16 * 11);
+	rings[1]->setY(16 * 10);
+
 	mapLoader->LoadMapDatabase("assets/sprites/Zone1", "assets/mapLayout.txt");
 
 	SDL_RenderSetLogicalSize(renderer, RES_WIDTH, RES_HEIGHT);
@@ -73,7 +81,10 @@ void Sanic::Game::render()
 	mapLoader->DrawBackground();
 	mapLoader->DrawMap(camera.x, camera.y);
 	interface->Render();
-	player->Render("player", camera.x, camera.y);
+	rings[0]->Render(camera.x, camera.y);
+	rings[1]->Render(camera.x, camera.y);
+	player->Render(camera.x, camera.y);
+
 	SDL_RenderPresent(renderer);
 }
 

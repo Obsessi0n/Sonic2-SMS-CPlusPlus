@@ -16,7 +16,7 @@ namespace Sanic {
 		void Jump();
 		void Physics() override;
 		void Update();
-		void Render(std::string id, int camX, int camY) override;
+		void Render(int camX, int camY) override;
 
 
 		void HorizontalMovementDir(signed char _direction);

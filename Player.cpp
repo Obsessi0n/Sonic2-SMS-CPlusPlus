@@ -142,8 +142,8 @@ void Sanic::Player::Update()
 	Physics();
 }
 
-void Sanic::Player::Render(std::string id, int camX, int camY) {
-	Sanic::_TextureManager::Instance()->DrawFrame(id, (int)m_x - camX, (int)m_y - camY, m_width, m_height, 0, 0, 0, Sanic::_Game::Instance()->getRenderer());
+void Sanic::Player::Render(int camX, int camY) {
+	Sanic::_TextureManager::Instance()->DrawFrame("player", (int)m_x - camX, (int)m_y - camY, m_width, m_height, 0, 0, 0, Sanic::_Game::Instance()->getRenderer());
 
 	// Debug Col
 	collisionBox.x = (int)m_x - camX;

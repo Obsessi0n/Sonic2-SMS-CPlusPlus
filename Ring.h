@@ -7,7 +7,7 @@ namespace Sanic {
 		Ring();
 		~Ring();
 		void Physics() override;
-		void Render(std::string id, int camX, int camY) override;
+		void Render(int camX, int camY) override;
 
 		bool isCollected() { return collected; };
 		bool isStatic() { return staticRing; };
