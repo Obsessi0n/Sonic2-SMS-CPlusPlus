@@ -4,10 +4,8 @@
 #include "TextureManager.h"
 #include "PhysicsManager.h"
 
-Sanic::Player::Player() {
-	lives = 3;
-	rings = 0;
-
+Sanic::Player::Player() 
+{
 	Sanic::_TextureManager::Instance()->Load("assets/sprites/player/player.png", "player", Sanic::_Game::Instance()->getRenderer());
 
 	m_x = Sanic::_Game::Instance()->getResWidth() / 2 - (m_width / 2);
@@ -15,7 +13,9 @@ Sanic::Player::Player() {
 	m_y = Sanic::_Game::Instance()->getResWidth() / 2 - (m_width / 2) + -60;
 }
 
-Sanic::Player::~Player() {
+Sanic::Player::~Player() 
+{
+	
 }
 
 void Sanic::Player::Move(bool dir) {
@@ -118,6 +118,11 @@ void Sanic::Player::Physics() {
 
 }
 
-void Sanic::Player::Render(int camX, int camY) {
-	Sanic::_TextureManager::Instance()->DrawFrame("player", (int)m_x - camX, (int)m_y - camY, m_width, m_height, 0, 0, 0, Sanic::_Game::Instance()->getRenderer());
+void Sanic::Player::Render(std::string id, int camX, int camY) {
+	Sanic::_TextureManager::Instance()->DrawFrame(id, (int)m_x - camX, (int)m_y - camY, m_width, m_height, 0, 0, 0, Sanic::_Game::Instance()->getRenderer());
+}
+
+void Sanic::Player::Destroy()
+{
+	//Destroy player
 }

@@ -1,52 +1,35 @@
 #pragma once
 #ifndef PLAYER_H
 #define PLAYER_H
+#include "Entity.h"
 #include <SDL.h>
 #include <SDL_image.h>
 
 namespace Sanic {
-	class Player {
+	class Player : public Entity {
 	public:
 		Player();
 		~Player();
 
 		void TakeDamage();
-		void Move(bool dir);
+		void Move(bool dir) override;
 		void Jump();
-		void Physics();
-		void Render(int camX, int camY);
+		void Physics() override;
+		void Render(std::string id, int camX, int camY) override;
 
 		int getPosX() { return m_x; };
 		int getPosY() { return m_y; };
 
-		int getSpeed() { return speed; };
-
 		int getWidth() { return m_width; };
 		int getHeight() { return m_height; };
 
-	private:
-		void Die();
+		void Destroy() override;
+
 		const float maxSpeed = 3;
 		const float initialSpeed = 0.0001;
 		float speed = initialSpeed;
 		const float acceleration = 0.1;
 		float currentAcceleration = acceleration;
-
-		float m_x = 0;
-		float m_y = 0;
-
-		int rings = 0;
-		int lives = 0;
-
-		bool isJumping = false;
-		bool isGrounded = false;
-
-		float fallingTimer = 0;
-		const int m_width = 32;
-		const int m_height = 32;
-
-		float jumpVelocity = 0;
-		float jumpForce = 3;
 	};
 }
 #endif
