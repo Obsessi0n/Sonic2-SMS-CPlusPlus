@@ -10,9 +10,9 @@ Sanic::Player::Player() {
 
 	Sanic::_TextureManager::Instance()->Load("assets/sprites/player/player.png", "player", Sanic::_Game::Instance()->getRenderer());
 
-	m_x = Sanic::_Game::Instance()->getScreenWidth() / 2 - (m_width / 2);
+	m_x = Sanic::_Game::Instance()->getResWidth() / 2 - (m_width / 2);
 
-	m_y = Sanic::_Game::Instance()->getScreenWidth() / 2 - (m_width / 2) + -60;
+	m_y = Sanic::_Game::Instance()->getResWidth() / 2 - (m_width / 2) + -60;
 }
 
 Sanic::Player::~Player() {
@@ -59,7 +59,6 @@ void Sanic::Player::Move(bool dir) {
 		//speed = initialSpeed;
 	}
 
-	cout << speed * currentAcceleration << '\n';
 	newXPOS += speed * currentAcceleration;
 
 	m_x = newXPOS;

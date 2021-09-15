@@ -13,7 +13,6 @@ namespace Sanic {
 		void TakeDamage();
 		void Move(bool dir);
 		void Jump();
-		void Render();
 		void Physics();
 		void Render(int camX, int camY);
 

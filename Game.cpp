@@ -22,7 +22,7 @@ bool Sanic::Game::init(const char* title, int x, int y, int flags) {
 
 	is_running = true;
 
-	camera = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+	camera = { 0, 0, RES_WIDTH, RES_HEIGHT };
 
 	player = new Player;
 	mapLoader = new MapLoader();
@@ -30,6 +30,7 @@ bool Sanic::Game::init(const char* title, int x, int y, int flags) {
 
 	mapLoader->LoadMapDatabase("assets/sprites/Zone1", "assets/mapLayout.txt");
 
+	SDL_RenderSetLogicalSize(renderer, RES_WIDTH, RES_HEIGHT);
 	return true;
 }
 
@@ -41,8 +42,8 @@ void Sanic::Game::handleEvents()
 void Sanic::Game::update()
 {
 	player->Physics();
-	camera.x = (player->getPosX() + player->getWidth() / 2) - SCREEN_WIDTH / 2;
-	camera.y = (player->getPosY() + player->getHeight() / 2) - SCREEN_HEIGHT / 2;
+	camera.x = (player->getPosX() + player->getWidth() / 2) - RES_WIDTH / 2;
+	camera.y = (player->getPosY() + player->getHeight() / 2) - RES_HEIGHT / 2;
 
 	if (camera.x < 0)
 	{

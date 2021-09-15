@@ -41,6 +41,9 @@ namespace Sanic {
 
 		int getScreenWidth() const { return SCREEN_WIDTH; };
 		int getScreenHeight() const { return SCREEN_HEIGHT; };
+		
+		int getResWidth() const { return RES_WIDTH; };
+		int getResHeight() const { return RES_HEIGHT; };
 
 		int getLevelWidth() const { return level_width; };
 		int getLevelHeight() const { return level_height; };
@@ -59,8 +62,11 @@ namespace Sanic {
 		MapLoader* mapLoader;
 		Interface* interface;
 
-		const int SCREEN_WIDTH = 256;
-		const int SCREEN_HEIGHT = 196;
+		const int SCREEN_WIDTH = 800;
+		const int SCREEN_HEIGHT = 600;
+
+		const int RES_WIDTH = 256;
+		const int RES_HEIGHT = 196;
 
 		int level_width = 5376;
 		int level_height = 768;

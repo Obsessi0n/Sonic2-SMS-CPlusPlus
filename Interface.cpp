@@ -23,7 +23,7 @@ void Sanic::Interface::TopUI()
 void Sanic::Interface::BottomUI()
 {
 	int bX = m_width / 2;
-	int bY = Sanic::_Game::Instance()->getScreenHeight() - m_height;
+	int bY = Sanic::_Game::Instance()->getResHeight() - m_height;
 	int offset = 8;
 
 	Sanic::_TextureManager::Instance()->DrawFrame("interface", bX, bY, m_width, m_height, 1, 0, 0, Sanic::_Game::Instance()->getRenderer());
