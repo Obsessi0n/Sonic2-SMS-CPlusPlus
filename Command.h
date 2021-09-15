@@ -16,11 +16,17 @@ namespace Sanic {
 
 	class MoveLeftCommand : public Command {
 	public:
-		virtual void execute() { Sanic::_Game::Instance()->getPlayer()->Move(false); };
+		virtual void execute() { Sanic::_Game::Instance()->getPlayer()->HorizontalMovementDir(-1); };
 	};
 
 	class MoveRightCommand : public Command {
 	public:
-		virtual void execute() { Sanic::_Game::Instance()->getPlayer()->Move(true); };
+		virtual void execute() { Sanic::_Game::Instance()->getPlayer()->HorizontalMovementDir(1); };
+	};
+
+
+	class StopMovement : public Command {
+	public:
+		virtual void execute() { Sanic::_Game::Instance()->getPlayer()->HorizontalMovementDir(0); };
 	};
 }

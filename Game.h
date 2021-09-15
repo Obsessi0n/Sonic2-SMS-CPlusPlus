@@ -62,8 +62,8 @@ namespace Sanic {
 		MapLoader* mapLoader;
 		Interface* interface;
 
-		const int SCREEN_WIDTH = 800;
-		const int SCREEN_HEIGHT = 600;
+		const int SCREEN_WIDTH = 256*4;
+		const int SCREEN_HEIGHT = 196*4;
 
 		const int RES_WIDTH = 256;
 		const int RES_HEIGHT = 196;

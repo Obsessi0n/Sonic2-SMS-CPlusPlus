@@ -3,16 +3,9 @@
 #include "Game.h"
 #include "TextureManager.h"
 
-void Sanic::Entity::Move(bool dir)
+void Sanic::Entity::Move()
 {
-	if (dir)
-	{
-		m_x++;
-	}
-	else
-	{
-		m_x--;
-	}
+
 }
 
 void Sanic::Entity::Physics()

@@ -5,7 +5,7 @@ namespace Sanic {
 	class Entity
 	{
 	public:
-		virtual void Move(bool dir);
+		virtual void Move();
 		virtual void Physics();
 		void Update();
 		virtual void Render(std::string id, int camX, int camY);

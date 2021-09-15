@@ -20,52 +20,69 @@ Sanic::Player::~Player()
 	
 }
 
-void Sanic::Player::Move(bool dir) {
+
+
+void Sanic::Player::HorizontalMovementDir(signed char _direction) {
+	direction = _direction;
+}
+
+
+void Sanic::Player::Move() {
 
 	float newXPOS = m_x;
 
-	//Calculate acceleration
-	currentAcceleration += acceleration;
-	if (currentAcceleration > maxSpeed)
-		currentAcceleration = maxSpeed;
-
-	speed = 1;
-
-	//Added an offset of 16 to x and y because we don't have a player collission box yet (DIRTY HACK)
-
-	if (dir) {
-		
-		if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x + speed + 16, m_y+16)) {
+	//If player is not pressing left or right
+	if (direction == 0) {
+		currentAcceleration -= acceleration;
+		if (currentAcceleration < 0)
 			currentAcceleration = 0;
-			speed = 0;
-		}		
 
-		if (m_x > Sanic::_Game::Instance()->getLevelWidth() - m_width)
-			m_x = Sanic::_Game::Instance()->getLevelWidth() - m_width;
-
-		//speed = initialSpeed;
-		
+		speed = lastDir;
 	}
-	else if (!dir)
-	{
-		speed = -speed;
-		if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x - speed-5, m_y + 16)) {
-			speed = 0;
-			currentAcceleration = 0;
+	else {
+
+		//Calculate acceleration
+		currentAcceleration += acceleration;
+		if (currentAcceleration > maxSpeed)
+			currentAcceleration = maxSpeed;
+
+		//Direction
+		speed = direction;
+
+
+		//Check collisions
+		//Added an offset of 16 to x and y because we don't have a player collission box yet (DIRTY HACK)
+		if (direction == 1) {
+			if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x + speed + 16, m_y + 16)) {
+				currentAcceleration = 0;
+				speed = 0;
+			}
+
+			else if (m_x > Sanic::_Game::Instance()->getLevelWidth() - m_width)
+				m_x = Sanic::_Game::Instance()->getLevelWidth() - m_width;
+			else
+				lastDir = 1;
+
 		}
-			
+		else {
+			if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x - speed - 5, m_y + 16)) {
+				speed = 0;
+				currentAcceleration = 0;
+			}
 
-		if (m_x <= 0.1f) // If m_x <0 we have a catastrophic failure!
-			m_x = 0.1f;
 
-		//speed = initialSpeed;
+			else if (m_x <= 0.1f) // If m_x <0 we have a catastrophic failure!
+				m_x = 0.1f;
+			else
+				lastDir = -1;
+		}
 	}
 
 	newXPOS += speed * currentAcceleration;
 
 	m_x = newXPOS;
 
-	//Decelarating, still to be implemented.
+	
 }
 
 void Sanic::Player::Jump() {

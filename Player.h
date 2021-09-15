@@ -12,11 +12,17 @@ namespace Sanic {
 		~Player();
 
 		void TakeDamage();
-		void Move(bool dir) override;
+		void Move() override;
 		void Jump();
 		void Physics() override;
 		void Update();
 		void Render(std::string id, int camX, int camY) override;
+
+
+		void HorizontalMovementDir(signed char _direction);
+		
+
+		signed char direction;
 
 		int getPosX() { return m_x; };
 		int getPosY() { return m_y; };
@@ -31,6 +37,10 @@ namespace Sanic {
 		float speed = initialSpeed;
 		const float acceleration = 0.1;
 		float currentAcceleration = acceleration;
+
+	private:
+		
+		signed char lastDir = 1;
 	};
 }
 #endif
