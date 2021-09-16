@@ -6,6 +6,9 @@ namespace Sanic {
 	public:
 		Ring();
 		~Ring();
+
+		void CheckCollision();
+
 		void Physics() override;
 		void Render(int camX, int camY) override;
 
@@ -14,5 +17,7 @@ namespace Sanic {
 	private:
 		bool collected = false;
 		bool staticRing = false;
+		void GetPicked();
+		SDL_Rect ringCol;
 	};
 }

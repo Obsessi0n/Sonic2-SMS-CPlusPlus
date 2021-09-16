@@ -64,8 +64,8 @@ namespace Sanic {
 		Interface* interface;
 		std::vector<Ring*> rings;
 
-		const int SCREEN_WIDTH = 256*4;
-		const int SCREEN_HEIGHT = 196*4;
+		const int SCREEN_WIDTH = 256;
+		const int SCREEN_HEIGHT = 196;
 
 		const int RES_WIDTH = 256;
 		const int RES_HEIGHT = 196;

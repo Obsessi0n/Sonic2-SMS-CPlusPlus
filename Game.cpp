@@ -1,7 +1,7 @@
 #pragma once
 #include "Game.h"
 #include "InputManager.h"
-
+#include <vector>
 Sanic::Game* Sanic::Game::instance = 0;
 
 bool Sanic::Game::init(const char* title, int x, int y, int flags) {
@@ -52,6 +52,10 @@ void Sanic::Game::update()
 	player->Update();
 	camera.x = (player->getPosX() + player->getWidth() / 2) - RES_WIDTH / 2;
 	camera.y = (player->getPosY() + player->getHeight() / 2) - RES_HEIGHT / 2;
+
+	for (int i = 0; i < rings.size(); i++) {
+		rings[i]->CheckCollision();
+	}
 
 	if (camera.x < 0)
 	{

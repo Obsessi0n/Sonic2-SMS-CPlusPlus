@@ -5,6 +5,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
+
 namespace Sanic {
 	class Player : public Entity {
 	public:
@@ -37,9 +38,10 @@ namespace Sanic {
 		float speed = initialSpeed;
 		const float acceleration = 0.1;
 		float currentAcceleration = acceleration;
-
+		SDL_Rect GetCollisionRect();
 	private:
-		
+
+
 		signed char lastDir = 1;
 	};
 }
