@@ -128,6 +128,7 @@ bool Sanic::MapLoader::GetBlockCollision(int x, int y) {
 
     std::string block = mapLayoutData[yBlock+1][xBlock];
 
+
     std::string line;
     std::ifstream maptxt(collisionsPath);
 
