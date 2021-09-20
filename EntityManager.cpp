@@ -13,7 +13,6 @@ void Sanic::EntityManager::LoadEntities(std::string path)
 	// Open .txt file
 	if (entitytxt.is_open())
 	{
-		int numberOfLines = 0;
 		unsigned i = 0;
 		while (getline(entitytxt, line))
 		{
@@ -21,7 +20,6 @@ void Sanic::EntityManager::LoadEntities(std::string path)
 			std::string position;
 			bool firstNumber = true;
 
-			++numberOfLines;
 			// Instantiate and set Ring locations
 			rings.push_back(new Ring());
 			while (getline(x, position, ','))
