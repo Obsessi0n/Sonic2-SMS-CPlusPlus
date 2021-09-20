@@ -5,16 +5,16 @@
 #include <fstream>
 #include <sstream>
 
-void Sanic::EntityManager::LoadEntities(std::string path)
+void Sanic::EntityManager::LoadEntities(const std::string& path)
 {
 	// Find .txt file
 	std::string line;
 	std::ifstream entitytxt(path);
 	// Open .txt file
-	if (entitytxt.is_open())
+	if (entitytxt)
 	{
-		unsigned i = 0;
-		while (getline(entitytxt, line))
+		uint32_t i = 0;
+		for (uint32_t i = 0u; getline(entitytxt, line); ++i)
 		{
 			std::stringstream x(line);
 			std::string position;
@@ -22,6 +22,7 @@ void Sanic::EntityManager::LoadEntities(std::string path)
 
 			// Instantiate and set Ring locations
 			rings.push_back(new Ring());
+
 			while (getline(x, position, ','))
 			{
 				if (firstNumber)
@@ -34,16 +35,14 @@ void Sanic::EntityManager::LoadEntities(std::string path)
 					rings[i]->setY(std::stoi(position));
 				}
 			}
-			++i;
 		}
-		entitytxt.close();
 	}
-	else std::cout << "Unable to open file" << '\n';
+	else std::puts("Unable to open file");
 }
 
 void Sanic::EntityManager::Update()
 {
-	for (int i = 0; i < rings.size(); i++) 
+	for (uint32_t i = 0; i < rings.size(); i++)
 	{
 		rings[i]->CheckCollision();
 	}
@@ -51,7 +50,7 @@ void Sanic::EntityManager::Update()
 
 void Sanic::EntityManager::RenderEntities(int camX, int camY)
 {
-	for (unsigned i = 0; i < rings.size(); ++i)
+	for (uint32_t i = 0; i < rings.size(); ++i)
 	{
 		rings[i]->Render(camX, camY);
 	}

@@ -5,7 +5,7 @@ namespace Sanic {
 	class EntityManager
 	{
 	public:
-		void LoadEntities(std::string path);
+		void LoadEntities(const std::string& path);
 		void Update();
 		void RenderEntities(int camX, int camY);
 		std::vector<Ring*> getRings() { return rings; };
