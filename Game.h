@@ -5,7 +5,7 @@
 #include "Player.h"
 #include "MapLoader.h"
 #include "Interface.h"
-#include "Ring.h"
+#include "EntityManager.h"
 
 #include <SDL.h>
 #include <iostream>
@@ -62,7 +62,7 @@ namespace Sanic {
 		Player* player;
 		MapLoader* mapLoader;
 		Interface* interface;
-		std::vector<Ring*> rings;
+		EntityManager* entityManager;
 
 		const int SCREEN_WIDTH = 256;
 		const int SCREEN_HEIGHT = 196;
