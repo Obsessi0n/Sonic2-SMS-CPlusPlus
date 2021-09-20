@@ -18,7 +18,7 @@ namespace Sanic {
 		void Physics() override;
 		void Update();
 		void Render(int camX, int camY) override;
-
+		void OnSlope(int* yPos);
 
 		void HorizontalMovementDir(signed char _direction);
 		
@@ -33,7 +33,7 @@ namespace Sanic {
 
 		void Destroy() override;
 
-		const float maxSpeed = 3;
+		const float maxSpeed = 1.5;
 		const float initialSpeed = 0.0001;
 		float speed = initialSpeed;
 		const float acceleration = 0.1;

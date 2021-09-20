@@ -23,7 +23,7 @@ namespace Sanic {
 		void DrawBackground();
 		void DrawMap(int camX, int camY);
 
-		bool GetBlockCollision(int x, int y);
+
 		bool IsTileSolid(int x, int y);
 
 		int GetMapSizeY() { return mapLayoutData.size(); };
@@ -38,7 +38,8 @@ namespace Sanic {
 
 		SDL_Rect* empty;
 
-		const std::string collisionsPath = "assets/blocksCollisions.txt";
+		const std::string solidBlocks = "assets/solidblocks.txt";
+		const std::string slopeBlocks = "assets/slopes.txt";
 	};
 }
 #endif

@@ -53,7 +53,8 @@ void Sanic::Player::Move() {
 		//Check collisions
 		//Added an offset of 16 to x and y because we don't have a player collission box yet (DIRTY HACK)
 		if (direction == 1) {
-			if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x + speed + 16, m_y + 16)) {
+			if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x + speed + 16, m_y+16)) {
+				cout << "Colliding";
 				currentAcceleration = 0;
 				speed = 0;
 			}
@@ -65,7 +66,7 @@ void Sanic::Player::Move() {
 
 		}
 		else {
-			if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x - speed - 5, m_y + 16)) {
+			if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x - speed - 5, m_y +16)) {
 				speed = 0;
 				currentAcceleration = 0;
 			}
@@ -100,11 +101,7 @@ void Sanic::Player::Physics() {
 
 
 	//First we check if the player is grounded!
-	if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x, m_y + 32))
-		isGrounded = true;
-	else
-		isGrounded = false;
-
+	isGrounded = Sanic::_PhysicsManager::Instance()->IsColliding(m_x, m_y + 32);
 
 	//Calculating the gravity.
 	if (!isGrounded) {
@@ -165,5 +162,7 @@ void Sanic::Player::Destroy()
 	//Destroy player
 }
 
-
+void Sanic::Player::OnSlope(int* yPos) {
+	m_y = (float)*yPos-32;
+}
 
