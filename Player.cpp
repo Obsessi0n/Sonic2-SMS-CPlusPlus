@@ -141,10 +141,10 @@ void Sanic::Player::Update()
 }
 
 void Sanic::Player::Render(int camX, int camY) {
-	Sanic::_TextureManager::Instance()->DrawFrame("player", (int)m_x - camX, (int)m_y - camY, m_width, m_height, 0, 0, 0, Sanic::_Game::Instance()->getRenderer());
+	Sanic::_TextureManager::Instance()->DrawFrame("player", ((int)m_x - cameraOffset) - camX, (int)m_y - camY, m_width, m_height, 0, 0, 0, Sanic::_Game::Instance()->getRenderer());
 
 	// Debug Col
-	collisionBox.x = (int)m_x + 5 - camX;
+	collisionBox.x = ((int)m_x - cameraOffset) + 5 - camX;
 	collisionBox.y = (int)m_y - camY;
 	SDL_SetRenderDrawColor(Sanic::_Game::Instance()->getRenderer(), 116, 235, 87, 150);
 	SDL_RenderDrawRect(Sanic::_Game::Instance()->getRenderer(), &collisionBox);

@@ -41,7 +41,7 @@ namespace Sanic {
 		SDL_Rect GetCollisionRect();
 	private:
 
-
+		uint32_t cameraOffset = 30;
 		signed char lastDir = 1;
 	};
 }
