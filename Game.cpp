@@ -88,6 +88,7 @@ void Sanic::Game::clean()
 	delete(mapLoader);
 	delete(interface);
 	delete(player);
+	delete(entityManager);
 	SDL_Quit();
 }
 
