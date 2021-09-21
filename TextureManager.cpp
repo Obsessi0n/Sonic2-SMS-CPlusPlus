@@ -55,6 +55,22 @@ void Sanic::TextureManager::DrawFrame(std::string id, int x, int y, int w, int h
 	SDL_RenderCopyEx(renderer, spritesheet[id], &srcRect, &destRect, 0, nullptr, flip);
 }
 
+void Sanic::TextureManager::DrawAnimation(std::string id, int x, int y, int w, int h, double scale, int currentRow, int frameAmount, int speed, SDL_Renderer* renderer, SDL_RendererFlip flip)
+{
+	SDL_Rect srcRect, destRect;
+	uint32_t ticks = SDL_GetTicks();
+	uint32_t currentFrame = (ticks / speed) % frameAmount;
+
+	srcRect.x = w * currentFrame;
+	srcRect.y = h * currentRow;
+	srcRect.w = destRect.w = w;
+	srcRect.h = destRect.h = h;
+	destRect.x = x;
+	destRect.y = y;
+
+	SDL_RenderCopyEx(renderer, spritesheet[id], &srcRect, &destRect, 0, nullptr, flip);
+}
+
 void Sanic::TextureManager::ClearFromSpritesheet(std::string id)
 {
 	spritesheet.erase(id);

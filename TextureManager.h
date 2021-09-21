@@ -25,6 +25,8 @@ namespace Sanic {
 		void Draw(std::string id, int x, int y, int w, int h, double scale, SDL_Renderer* renderer, SDL_RendererFlip flip = SDL_FLIP_NONE);
 		
 		void DrawFrame(std::string id, int x, int y, int w, int h, double scale, int currentRow, int currentFrame, SDL_Renderer* renderer, SDL_RendererFlip = SDL_FLIP_NONE);
+
+		void DrawAnimation(std::string id, int x, int y, int w, int h, double scale, int currentRow, int frameAmount, int speed, SDL_Renderer* renderer, SDL_RendererFlip flip = SDL_FLIP_NONE);
 		
 		void ClearFromSpritesheet(std::string id);
 

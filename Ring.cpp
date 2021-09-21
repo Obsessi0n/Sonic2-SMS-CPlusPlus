@@ -26,10 +26,7 @@ void Sanic::Ring::Render(int camX, int camY)
 	ringCol = { (int)m_x - camX, (int)m_y - camY, m_width, m_height };
 	if (!isCollected())
 	{
-		uint32_t ticks = SDL_GetTicks();
-		uint32_t currentFrame = (ticks / 200) % 4;
-
-		Sanic::_TextureManager::Instance()->DrawFrame("ring", (int)m_x - camX, (int)m_y - camY, m_width, m_height, 0, 0, currentFrame, Sanic::_Game::Instance()->getRenderer());
+		Sanic::_TextureManager::Instance()->DrawAnimation("ring", (int)m_x - camX, (int)m_y - camY, m_width, m_height, 0, 0, 4, 200, Sanic::_Game::Instance()->getRenderer());
 	}
 	else
 	{
