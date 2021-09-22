@@ -33,7 +33,7 @@ namespace Sanic {
 
 		void Destroy() override;
 
-		const float maxSpeed = 2;
+		const float maxSpeed = 2.2f;
 		const float initialSpeed = 0.0001;
 		float speed = initialSpeed;
 		const float acceleration = 0.1;
