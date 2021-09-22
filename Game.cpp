@@ -1,5 +1,6 @@
 #pragma once
 #include "Game.h"
+#include "TextureManager.h"
 #include "InputManager.h"
 #include <vector>
 Sanic::Game* Sanic::Game::instance = 0;
@@ -26,7 +27,7 @@ bool Sanic::Game::init(const char* title, int x, int y, int flags) {
 
 	player = new Player;
 	mapLoader = new MapLoader();
-	interface = new Interface();
+	interface = new UserInterface();
 	entityManager = new EntityManager();
 
 	mapLoader->LoadMapDatabase("assets/sprites/Zone1", "assets/mapLayout.txt");
@@ -83,12 +84,13 @@ void Sanic::Game::render()
 
 void Sanic::Game::clean()
 {
-	SDL_DestroyWindow(window);
-	SDL_DestroyRenderer(renderer);
+	Sanic::_TextureManager::Instance()->ClearFromSpritesheet("player");
 	delete(mapLoader);
 	delete(interface);
 	delete(player);
 	delete(entityManager);
+	SDL_DestroyWindow(window);
+	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
 }
 

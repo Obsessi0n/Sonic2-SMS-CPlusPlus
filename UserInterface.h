@@ -1,9 +1,9 @@
 #pragma once
 namespace Sanic {
-	class Interface
+	class UserInterface
 	{
 	public:
-		Interface();
+		UserInterface();
 		void TopUI();
 		void BottomUI();
 		void Render();

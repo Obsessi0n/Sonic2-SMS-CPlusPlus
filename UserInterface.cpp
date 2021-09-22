@@ -1,13 +1,13 @@
-#include "Interface.h"
+#include "UserInterface.h"
 #include "TextureManager.h"
 #include "Game.h"
 
-Sanic::Interface::Interface()
+Sanic::UserInterface::UserInterface()
 {
 	Sanic::_TextureManager::Instance()->Load("assets/sprites/player/ui.png", "interface", Sanic::_Game::Instance()->getRenderer());
 }
 
-void Sanic::Interface::TopUI()
+void Sanic::UserInterface::TopUI()
 {
 	int tX = m_width / 2;
 	int tY = 1;
@@ -20,7 +20,7 @@ void Sanic::Interface::TopUI()
 
 }
 
-void Sanic::Interface::BottomUI()
+void Sanic::UserInterface::BottomUI()
 {
 	int bX = m_width / 2;
 	int bY = Sanic::_Game::Instance()->getResHeight() - m_height;
@@ -32,7 +32,7 @@ void Sanic::Interface::BottomUI()
 	Sanic::_TextureManager::Instance()->DrawFrame("interface", bX + (m_width * 2) - offset, bY, m_width, m_height, 1, 0, 3, Sanic::_Game::Instance()->getRenderer());
 }
 
-void Sanic::Interface::Render()
+void Sanic::UserInterface::Render()
 {
 	TopUI();
 	BottomUI();
