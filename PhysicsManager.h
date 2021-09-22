@@ -20,13 +20,16 @@ namespace Sanic {
 		~PhysicsManager();
 
 		float CalculateGravityForce(float _fallingTimer);
-		bool IsColliding(int x, int y);
+		bool IsColliding(float const& xLiteralPosition, float const& yLiteralPosition);
+		char CheckIfGrounded(float const& xLiteralPosition,float const& yLiteralPosition);
 
 	private:
 		static PhysicsManager* instance;
 		const float GRAVITY = 9.80665f;
 		const float ACCELERATION = 10.0f;
 		const float TERMINALVELOCITY = 2.0f;
+
+		int CalculateSlope(int const& xBlock, int const& yBlock);
 		
 
 	};

@@ -101,7 +101,10 @@ void Sanic::Player::Physics() {
 
 
 	//First we check if the player is grounded!
-	isGrounded = Sanic::_PhysicsManager::Instance()->IsColliding(m_x, m_y + 32);
+	if (Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x, m_y + 32) !=0) //0 means no solid block
+		isGrounded = true;
+	else
+		isGrounded = false;
 
 	//Calculating the gravity.
 	if (!isGrounded) {
@@ -115,9 +118,7 @@ void Sanic::Player::Physics() {
 	
 	//We check if our head is banging on a tile
 	if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x, m_y - 5)) 
-		jumpVelocity = 0;
-
-		
+		jumpVelocity = 0;	
 
 
 	//We decrease the jump velocity with time

@@ -43,6 +43,8 @@ namespace Sanic {
 		int getScreenWidth() const { return SCREEN_WIDTH; };
 		int getScreenHeight() const { return SCREEN_HEIGHT; };
 		
+		int getTileSize() const { return TileSize; };
+
 		int getResWidth() const { return RES_WIDTH; };
 		int getResHeight() const { return RES_HEIGHT; };
 
@@ -69,6 +71,8 @@ namespace Sanic {
 
 		const int RES_WIDTH = 256;
 		const int RES_HEIGHT = 196;
+
+		const int TileSize = 32;
 
 		int level_width = 5376;
 		int level_height = 768;

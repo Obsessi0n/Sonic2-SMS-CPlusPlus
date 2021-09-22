@@ -23,8 +23,9 @@ namespace Sanic {
 		void DrawBackground();
 		void DrawMap(int camX, int camY);
 
+		void GetSlopeStartEnd(int* yStart, int* yEnd, int const& xBlock, int const& yBlock);
 
-		bool IsTileSolid(int x, int y);
+		char GetBlockType(int const&  x,int const& y);
 
 		int GetMapSizeY() { return mapLayoutData.size(); };
 

@@ -115,72 +115,80 @@ void Sanic::MapLoader::DrawMap(int camX, int camY) {
     else std::cout << "Unable to open file" << '\n';
 }
 
-
-bool Sanic::MapLoader::IsTileSolid(int x, int y) {
-
+/*Air = 0
+* Floor = 1
+* Slope = 2
+*/
+char Sanic::MapLoader::GetBlockType(int const& xBlock, int const& yBlock) {
     
-    if (y + 2 > mapLayoutData.size())
-        return true;
+    //If out of bounds
+    if (yBlock + 2 > mapLayoutData.size())
+        return 1;
 
-
-    std::string block = mapLayoutData[y][x];
+    //We swap x and y to be compatible with maplayoutdata
+    std::string block = mapLayoutData[yBlock][xBlock];
 
     std::string line;
+
+    //Check if slope
+    std::ifstream slopesTxt(slopeBlocks);
+    std::vector<std::string> wordsInLine;
+    std::string singleWord;
+    while (getline(slopesTxt, line)) {
+        std::stringstream X(line);      
+
+        while (getline(X, singleWord, ' ')) {
+            wordsInLine.push_back(singleWord);
+        }
+        if (wordsInLine[0] == block) {
+            //Means it is a slope!
+            return 2;            
+
+        }           
+
+        wordsInLine.clear();
+    }
+
+    //Check if solid block    
+    std::ifstream solidBlockTxt(solidBlocks);
+    while (getline(solidBlockTxt, line)) {
+        if (line == block) { return 1; }        
+    }
+
+    //If we get here the block is not solid
+    return 0;
+}
+
+
+/*
+I Hate this, it's super not efficient we are opening the file again and searching for the block
+we just did that on GetBlockType. This needs to be reworked!
+Maybe just load it all into memory when game starts.
+*/
+void Sanic::MapLoader::GetSlopeStartEnd(int* yStart, int* yEnd, int const& xBlock, int const& yBlock) {
+
+    //We swap x and y to be compatible with maplayoutdata
+    std::string block = mapLayoutData[yBlock][xBlock];
+
+    std::string line;
+
     //Check if slope
     std::ifstream slopesTxt(slopeBlocks);
     std::vector<std::string> wordsInLine;
     std::string singleWord;
     while (getline(slopesTxt, line)) {
         std::stringstream X(line);
-       
 
         while (getline(X, singleWord, ' ')) {
             wordsInLine.push_back(singleWord);
         }
-
-
         if (wordsInLine[0] == block) {
-            //Calculate the slope y position
-            int yStart = std::stoi(wordsInLine[1]);
-            int yEnd = std::stoi(wordsInLine[2]);
-            int blockPosY = y*32;            
-            
-
-            //Find b
-            int b = yStart;
-
-            //find m
-            float temp = (yEnd - b);
-            float m = temp / 32;
-            //Now we have
-            //y = mx+b
-
-            //Slope y on the x
-            int slopeY = (m * (Sanic::_Game::Instance()->getPlayer()->getPosX()-(32*x)) + b)+(y*32);
-            
-            
-            if (Sanic::_Game::Instance()->getPlayer()->getPosY() + 32 >= slopeY) {
-                Sanic::_Game::Instance()->getPlayer()->OnSlope(&slopeY);
-                return true;
-            }
-
-            return false;
+            //block found
+            *yStart = std::stoi(wordsInLine[1]);
+            *yEnd = std::stoi(wordsInLine[2]);
 
         }
-            
 
         wordsInLine.clear();
     }
-
-    //Check if solid block
-    
-    std::ifstream solidBlockTxt(solidBlocks);
-
-    while (getline(solidBlockTxt, line)) {
-        if (line == block) {
-            return true;
-            break;
-        }
-    }
-    return false;
 }
