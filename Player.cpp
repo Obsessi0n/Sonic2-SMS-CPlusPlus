@@ -40,7 +40,7 @@ void Sanic::Player::Move() {
 			currentAcceleration = 0;
 	}
 	else if (direction == 0) { //If player is not pressing left or right
-			currentAcceleration -= decelaration;
+			currentAcceleration -= friction;
 			if (currentAcceleration < 0)
 				currentAcceleration = 0;
 

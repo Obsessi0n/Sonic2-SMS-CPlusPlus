@@ -38,6 +38,7 @@ namespace Sanic {
 		float speed = initialSpeed;
 		const float acceleration = 0.2;
 		const float decelaration = 0.06;
+		const float friction = 0.05;
 		float currentAcceleration = acceleration;
 		SDL_Rect GetCollisionRect();
 	private:
