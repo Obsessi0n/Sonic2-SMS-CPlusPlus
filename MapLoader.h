@@ -28,7 +28,7 @@ namespace Sanic {
 		char GetBlockType(int const&  x,int const& y);
 
 		int GetMapSizeY() { return mapLayoutData.size(); };
-
+		string GetBlockID(int const& xBlock, int const& yBlock);
 	private:
 
 		vector<vector<string>> mapLayoutData;

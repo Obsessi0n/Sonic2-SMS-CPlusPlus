@@ -32,8 +32,8 @@ bool Sanic::PhysicsManager::IsColliding(float const& xLiteralPosition, float con
 	int playerSizeTile = 1;
 
 	//We convert the literal position into tile number
-	int xBlock = xLiteralPosition / 32;
-	int yBlock = yLiteralPosition / 32;
+	int xBlock = std::floor(xLiteralPosition / 32);
+	int yBlock = std::floor(yLiteralPosition / 32);
 
 	//If player is outside bounds on the Y
 	if (yBlock + playerSizeTile > Sanic::_Game::Instance()->getMapLoader()->GetMapSizeY())
@@ -66,13 +66,24 @@ bool Sanic::PhysicsManager::IsColliding(float const& xLiteralPosition, float con
 */
 char Sanic::PhysicsManager::CheckIfGrounded(float const& xLiteralPosition, const float& yLiteralPosition) {
 
+	//cout << "Player y: " << xLiteralPosition << '\n';
+
 	//Convert Literal Position to block.
-	int xBlock = xLiteralPosition / Sanic::_Game::Instance()->getTileSize();
-	int yBlock = yLiteralPosition / Sanic::_Game::Instance()->getTileSize();;
+	int xBlock = std::floor(xLiteralPosition / Sanic::_Game::Instance()->getTileSize());
+	int yBlock = std::floor(yLiteralPosition / Sanic::_Game::Instance()->getTileSize());;
+
+	
+
 	char blockType = 0;
 	//We check the tile
 	blockType = Sanic::_Game::Instance()->getMapLoader()->GetBlockType(xBlock, yBlock);
-	if (blockType == 1) { return blockType; }
+
+	//cout << "Checking Block on ground: " << Sanic::_Game::Instance()->getMapLoader()->GetBlockID(xBlock, yBlock) << '\n';
+
+	if (blockType == 1) {
+
+		return blockType; 
+	}
 	
 	else if (blockType == 2) {
 		int slopeY = CalculateSlope(xBlock, yBlock);

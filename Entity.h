@@ -25,14 +25,14 @@ namespace Sanic {
 		int m_width = 32;
 		int m_height = 32;
 
-		SDL_Rect collisionBox{ (int)m_x, (int)m_y, 0, 0 };
+		SDL_Rect entityCollisionBox{ (int)m_x, (int)m_y, 0, 0 };
+		SDL_Rect CollisionBox{ (int)m_x, (int)m_y, 0, 0 };
 
 		bool isJumping = false;
 		bool isGrounded = false;
 
 		float fallingTimer = 0;
-
 		float jumpVelocity = 0;
-		float jumpForce = 3;
+		float jumpForce = 4;
 	};
 }

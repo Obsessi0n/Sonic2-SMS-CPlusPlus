@@ -12,7 +12,8 @@ Sanic::Player::Player()
 
 	m_y = Sanic::_Game::Instance()->getResWidth() / 2 - (m_width / 2) - 60;
 
-	collisionBox = { (int)m_x+5, (int)m_y, 8, 32 };
+	entityCollisionBox = { (int)m_x+5, (int)m_y, 8, 32 };
+	CollisionBox = { (int)m_x, (int)m_y, 16, 32 };
 }
 
 Sanic::Player::~Player() 
@@ -31,16 +32,24 @@ void Sanic::Player::Move() {
 
 	float newXPOS = m_x;
 
-	//If player is not pressing left or right
-	if (direction == 0) {
-		currentAcceleration -= acceleration;
+	//Player changed direction
+	if (direction != lastDir && currentAcceleration > 0) {
+	
+		currentAcceleration -= decelaration;
 		if (currentAcceleration < 0)
 			currentAcceleration = 0;
-
-		speed = lastDir;
 	}
-	else {
+	else if (direction == 0) { //If player is not pressing left or right
+			currentAcceleration -= decelaration;
+			if (currentAcceleration < 0)
+				currentAcceleration = 0;
 
+			speed = lastDir;
+	}
+
+
+	else {
+		
 		//Calculate acceleration
 		currentAcceleration += acceleration;
 		if (currentAcceleration > maxSpeed)
@@ -51,9 +60,9 @@ void Sanic::Player::Move() {
 
 
 		//Check collisions
-		//Added an offset of 16 to x and y because we don't have a player collission box yet (DIRTY HACK)
+		
 		if (direction == 1) {
-			if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x + speed + 16, m_y+16)) {
+			if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x + speed-16, m_y) || Sanic::_PhysicsManager::Instance()->IsColliding(m_x + speed - 16, m_y+31)) {
 				cout << "Colliding";
 				currentAcceleration = 0;
 				speed = 0;
@@ -66,7 +75,7 @@ void Sanic::Player::Move() {
 
 		}
 		else {
-			if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x - speed - 5, m_y +16)) {
+			if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x - speed - 33, m_y) || Sanic::_PhysicsManager::Instance()->IsColliding(m_x - speed - 32, m_y + 31)) {
 				speed = 0;
 				currentAcceleration = 0;
 			}
@@ -101,7 +110,7 @@ void Sanic::Player::Physics() {
 
 
 	//First we check if the player is grounded!
-	if (Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x, m_y + 32) !=0) //0 means no solid block
+	if (Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x, m_y + 32) != 0)
 		isGrounded = true;
 	else
 		isGrounded = false;
@@ -144,17 +153,23 @@ void Sanic::Player::Update()
 void Sanic::Player::Render(int camX, int camY) {
 	Sanic::_TextureManager::Instance()->DrawFrame("player", ((int)m_x - cameraOffset) - camX, (int)m_y - camY, m_width, m_height, 0, 0, 0, Sanic::_Game::Instance()->getRenderer());
 
-	// Debug Col
-	collisionBox.x = ((int)m_x - cameraOffset) + 5 - camX;
-	collisionBox.y = (int)m_y - camY;
+	// Debug EntityCol
+	entityCollisionBox.x = ((int)m_x - cameraOffset) + 5 - camX;
+	entityCollisionBox.y = (int)m_y - camY;
 	SDL_SetRenderDrawColor(Sanic::_Game::Instance()->getRenderer(), 116, 235, 87, 150);
-	SDL_RenderDrawRect(Sanic::_Game::Instance()->getRenderer(), &collisionBox);
+	SDL_RenderDrawRect(Sanic::_Game::Instance()->getRenderer(), &entityCollisionBox);
+	//Debug Col
+	CollisionBox.x = ((int)m_x+2 - cameraOffset) - camX;
+	CollisionBox.y = (int)m_y - camY;
+	SDL_SetRenderDrawColor(Sanic::_Game::Instance()->getRenderer(), 255, 192, 203, 150);
+	SDL_RenderDrawRect(Sanic::_Game::Instance()->getRenderer(), &CollisionBox);
+
 }
 
 
 SDL_Rect Sanic::Player::GetCollisionRect() {
 
-	return collisionBox;
+	return entityCollisionBox;
 }
 
 

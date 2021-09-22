@@ -11,7 +11,7 @@ Sanic::Ring::Ring()
 	m_width = 16;
 	m_height = 16;
 
-	collisionBox = { (int)m_x, (int)m_y, m_width, m_height };
+	entityCollisionBox = { (int)m_x, (int)m_y, m_width, m_height };
 }
 Sanic::Ring::~Ring() {
 	

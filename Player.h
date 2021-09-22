@@ -33,13 +33,17 @@ namespace Sanic {
 
 		void Destroy() override;
 
-		const float maxSpeed = 1.5;
+		const float maxSpeed = 3;
 		const float initialSpeed = 0.0001;
 		float speed = initialSpeed;
-		const float acceleration = 0.1;
+		const float acceleration = 0.2;
+		const float decelaration = 0.06;
 		float currentAcceleration = acceleration;
 		SDL_Rect GetCollisionRect();
 	private:
+	
+
+
 
 		uint32_t cameraOffset = 30;
 		signed char lastDir = 1;

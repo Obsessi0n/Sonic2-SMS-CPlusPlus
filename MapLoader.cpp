@@ -127,7 +127,7 @@ char Sanic::MapLoader::GetBlockType(int const& xBlock, int const& yBlock) {
 
     //We swap x and y to be compatible with maplayoutdata
     std::string block = mapLayoutData[yBlock][xBlock];
-
+    //cout << block << '\n';
     std::string line;
 
     //Check if slope
@@ -191,4 +191,10 @@ void Sanic::MapLoader::GetSlopeStartEnd(int* yStart, int* yEnd, int const& xBloc
 
         wordsInLine.clear();
     }
+}
+
+
+string Sanic::MapLoader::GetBlockID(int const& xBlock, int const& yBlock) {
+    //We swap x and y to be compatible with maplayoutdata
+    return mapLayoutData[yBlock][xBlock];
 }

@@ -27,6 +27,8 @@ void Sanic::InputManager::HandleInput()
 		arrowRight_->execute();
 	}
 
+
+
 	if (!currentKeyStates[SDL_SCANCODE_LEFT] && !currentKeyStates[SDL_SCANCODE_RIGHT]) {
 		noArrow_->execute();
 	}
