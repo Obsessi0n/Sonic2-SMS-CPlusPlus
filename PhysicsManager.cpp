@@ -41,10 +41,19 @@ bool Sanic::PhysicsManager::IsColliding(float const& xLiteralPosition, float con
 	else if (yLiteralPosition <= 5) //if y < 0 we are in big shit. Player will be out of bounds and SDL will crash.
 		return true;
 
-	//Now we check the map	
-	if (Sanic::_Game::Instance()->getMapLoader()->GetBlockType(xBlock, yBlock) != 0) {
+	//Now we check the map for solid block
+	if (Sanic::_Game::Instance()->getMapLoader()->GetBlockType(xBlock, yBlock) == 1) {
 		return true;
 	}
+	//Checking for slope
+	else if (Sanic::_Game::Instance()->getMapLoader()->GetBlockType(xBlock, yBlock) == 2) {
+		int slopeY = CalculateSlope(xBlock, yBlock);
+
+		if (Sanic::_Game::Instance()->getPlayer()->getPosY() + 32 >= slopeY) {
+			Sanic::_Game::Instance()->getPlayer()->OnSlope(&slopeY);			
+		}
+	}
+	
 
 	//If we get to this point there is no collision
 	return false;
