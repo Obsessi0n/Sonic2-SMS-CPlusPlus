@@ -123,3 +123,4 @@ int Sanic::PhysicsManager::CalculateSlope(int const& xBlock, int const& yBlock) 
 	return slopeY;
 
 }
+

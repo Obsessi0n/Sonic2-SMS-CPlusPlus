@@ -110,8 +110,10 @@ void Sanic::Player::Physics() {
 
 
 	//First we check if the player is grounded!
-	if (Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x, m_y + 32) != 0)
+	if (Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x, m_y + 32) != 0) {
 		isGrounded = true;
+		m_y = floor(m_y);
+	}		
 	else
 		isGrounded = false;
 
