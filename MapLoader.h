@@ -6,7 +6,6 @@
 #include <string>
 
 #include <vector>
-using namespace std;
 
 namespace Sanic {
 
@@ -28,10 +27,10 @@ namespace Sanic {
 		char GetBlockType(int const&  x,int const& y);
 
 		int GetMapSizeY() { return mapLayoutData.size(); };
-		string GetBlockID(int const& xBlock, int const& yBlock);
+		std::string GetBlockID(int const& xBlock, int const& yBlock);
 	private:
 
-		vector<vector<string>> mapLayoutData;
+		std::vector<std::vector<std::string>> mapLayoutData;
 
 		//std::list<SDL_Surface*> mapDatabase;
 		std::string mapLayoutPath;

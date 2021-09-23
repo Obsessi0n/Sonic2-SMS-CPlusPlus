@@ -15,8 +15,8 @@ void Sanic::InputManager::HandleInput()
 			_Game::Instance()->quit();
 	}
 
-	if (currentKeyStates[SDL_SCANCODE_UP]) {
-		arrowUp_->execute();
+	if (currentKeyStates[SDL_SCANCODE_Z]) {
+		Z_->execute();
 	}
 
 	if (currentKeyStates[SDL_SCANCODE_LEFT]) {

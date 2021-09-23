@@ -55,7 +55,7 @@ void Sanic::MapLoader::LoadMapDatabase(std::string databasePath, std::string act
     //Open maplayoutxt
     std::string line;
     std::ifstream maptxt(mapLayoutPath);
-    vector<string> tempLine;
+    std::vector<std::string> tempLine;
 
     if (maptxt.is_open())
     {
@@ -194,7 +194,7 @@ void Sanic::MapLoader::GetSlopeStartEnd(int* yStart, int* yEnd, int const& xBloc
 }
 
 
-string Sanic::MapLoader::GetBlockID(int const& xBlock, int const& yBlock) {
+std::string Sanic::MapLoader::GetBlockID(int const& xBlock, int const& yBlock) {
     //We swap x and y to be compatible with maplayoutdata
     return mapLayoutData[yBlock][xBlock];
 }

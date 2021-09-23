@@ -5,7 +5,6 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
-
 namespace Sanic {
 	class Player : public Entity {
 	public:
@@ -20,8 +19,7 @@ namespace Sanic {
 		void Render(int camX, int camY) override;
 		void OnSlope(int* yPos);
 
-		void HorizontalMovementDir(signed char _direction);
-		
+		void HorizontalMovementDir(char _direction);
 
 		signed char direction;
 
@@ -34,20 +32,17 @@ namespace Sanic {
 		void Destroy() override;
 
 		const float maxSpeed = 2.2f;
-		const float initialSpeed = 0.0001;
+		const float initialSpeed = 0.0001f;
 		float speed = initialSpeed;
-		const float acceleration = 0.1;
-		const float decelaration = 0.06;
-		const float friction = 0.05;
+		const float acceleration = 0.1f;
+		const float decelaration = 0.06f;
+		const float friction = 0.05f;
 		float currentAcceleration = acceleration;
 		SDL_Rect GetCollisionRect();
 	private:
-	
-
-
 
 		uint32_t cameraOffset = 30;
-		signed char lastDir = 1;
+		char lastDir = 1;
 	};
 }
 #endif
