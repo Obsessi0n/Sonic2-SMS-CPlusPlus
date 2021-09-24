@@ -47,6 +47,7 @@ void Sanic::EntityManager::Update()
 		rings[i]->CheckCollision();
 		if (rings[i]->GetCollected())
 		{
+			delete rings[i];
 			rings.erase(std::next(std::begin(rings), i));
 		}
 	}
