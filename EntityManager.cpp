@@ -45,6 +45,10 @@ void Sanic::EntityManager::Update()
 	for (uint32_t i = 0; i < rings.size(); i++)
 	{
 		rings[i]->CheckCollision();
+		if (rings[i]->GetCollected())
+		{
+			rings.erase(std::next(std::begin(rings), i));
+		}
 	}
 }
 
@@ -53,5 +57,5 @@ void Sanic::EntityManager::RenderEntities(int camX, int camY)
 	for (uint32_t i = 0; i < rings.size(); ++i)
 	{
 		rings[i]->Render(camX, camY);
-	}
+	};
 }
