@@ -14,12 +14,12 @@ Sanic::PhysicsManager::~PhysicsManager() {
 }
 float Sanic::PhysicsManager::CalculateGravityForce(float _fallingTimer) {
 
-	float factor = 2;
+	//float factor = 2;
 
-	float velocity = (GRAVITY  * (ACCELERATION * (_fallingTimer/1000) / factor));
+	float velocity = GRAVITY * (_fallingTimer / 1000);//(GRAVITY  * (ACCELERATION * (_fallingTimer/1000) / factor));
 
-	if(velocity > TERMINALVELOCITY)
-		velocity = TERMINALVELOCITY;	
+	//if(velocity > TERMINALVELOCITY)
+	//	velocity = TERMINALVELOCITY;	
 
 	return velocity;
 

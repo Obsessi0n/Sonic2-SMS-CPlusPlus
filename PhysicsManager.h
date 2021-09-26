@@ -25,7 +25,7 @@ namespace Sanic {
 
 	private:
 		static PhysicsManager* instance;
-		const float GRAVITY = 9.80665f;
+		const float GRAVITY = 30;
 		const float ACCELERATION = 10.0f;
 		const float TERMINALVELOCITY = 2.0f;
 
