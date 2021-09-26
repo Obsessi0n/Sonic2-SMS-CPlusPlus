@@ -53,7 +53,7 @@ void Sanic::Player::Move() {
 		//Check collisions
 
 		if (direction == 1) {
-			if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x + speed - 16, m_y) || Sanic::_PhysicsManager::Instance()->IsColliding(m_x + speed - 16, m_y + 31)) {
+			if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x + speed+16, m_y) || Sanic::_PhysicsManager::Instance()->IsColliding(m_x + speed +16, m_y + 20)) {
 				std::cout << "Colliding";
 				currentAcceleration = 0;
 				speed = 0;
@@ -65,7 +65,7 @@ void Sanic::Player::Move() {
 				lastDir = 1;
 		}
 		else {
-			if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x - speed - 33, m_y) || Sanic::_PhysicsManager::Instance()->IsColliding(m_x - speed - 32, m_y + 31)) {
+			if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x - speed-2, m_y) || Sanic::_PhysicsManager::Instance()->IsColliding(m_x - speed -2, m_y + 20)) {
 				speed = 0;
 				currentAcceleration = 0;
 			}
@@ -94,9 +94,9 @@ void Sanic::Player::Physics() {
 	float gravityForce = 0;
 
 	//First we check if the player is grounded!
-	if (Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x, m_y + 32) != 0) {
+	if (Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x, m_y + 32) != 0 || Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x+16, m_y + 32) != 0) {
 		isGrounded = true;
-		m_y = floor(m_y);
+		//m_y = m_y-0.1;
 	}
 	else
 		isGrounded = false;
