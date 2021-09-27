@@ -27,7 +27,7 @@ bool Sanic::Game::init(const char* title, int x, int y, int flags) {
 
 	player = new Player;
 	mapLoader = new MapLoader();
-	interface = new UserInterface();
+	userInterface = new UserInterface();
 	entityManager = new EntityManager();
 
 	mapLoader->LoadMapDatabase("assets/sprites/Zone1", "assets/mapLayout.txt");
@@ -76,7 +76,7 @@ void Sanic::Game::render()
 	SDL_RenderClear(renderer);
 	mapLoader->DrawBackground();
 	mapLoader->DrawMap(camera.x, camera.y);
-	interface->Render();
+	userInterface->Render();
 	player->Render(camera.x, camera.y);
 	entityManager->RenderEntities(camera.x, camera.y);
 	SDL_RenderPresent(renderer);
@@ -86,7 +86,7 @@ void Sanic::Game::clean()
 {
 	Sanic::_TextureManager::Instance()->ClearFromSpritesheet("player");
 	delete(mapLoader);
-	delete(interface);
+	delete(userInterface);
 	delete(player);
 	delete(entityManager);
 	SDL_DestroyWindow(window);

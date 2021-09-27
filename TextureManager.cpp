@@ -8,7 +8,7 @@ bool Sanic::TextureManager::Load(std::string fileName, std::string id, SDL_Rende
     SDL_Surface* tempSurface = IMG_Load(fileName.c_str());
 	if (tempSurface == nullptr)
 	{
-		std::cerr << "Image with name " << fileName.c_str() << " could not be loaded!" << '\n';
+		std::cerr << "Image with name " << fileName.c_str() << " could not be loaded! " << IMG_GetError() << '\n';
 		return false;
 	}
 

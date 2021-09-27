@@ -63,7 +63,7 @@ namespace Sanic {
 
 		Player* player;
 		MapLoader* mapLoader;
-		UserInterface* interface;
+		UserInterface* userInterface;
 		EntityManager* entityManager;
 
 		const int SCREEN_WIDTH = 256;
