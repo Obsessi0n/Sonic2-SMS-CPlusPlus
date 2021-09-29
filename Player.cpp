@@ -12,7 +12,7 @@ Sanic::Player::Player()
 
 	m_y = Sanic::_Game::Instance()->getResWidth() / 2 - (m_width / 2) - 60;
 
-	entityCollisionBox = { (int)m_x + 5, (int)m_y, 8, 32 };
+	entityCollisionBox = { (int)m_x, (int)m_y, 8, 32 };
 	CollisionBox = { (int)m_x, (int)m_y, 16, 32 };
 }
 
@@ -49,37 +49,24 @@ void Sanic::Player::Move() {
 
 		//Direction
 		speed = direction;
-
 		//Check collisions
 
 		if (direction == 1) {
-			if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x + speed+16, m_y) || Sanic::_PhysicsManager::Instance()->IsColliding(m_x + speed +16, m_y + 20)) {
-				std::cout << "Colliding";
-				currentAcceleration = 0;
-				speed = 0;
-			}
 
-			else if (m_x > Sanic::_Game::Instance()->getLevelWidth() - m_width)
-				m_x = Sanic::_Game::Instance()->getLevelWidth() - m_width;
-			else
 				lastDir = 1;
 		}
 		else {
-			if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x - speed-2, m_y) || Sanic::_PhysicsManager::Instance()->IsColliding(m_x - speed -2, m_y + 20)) {
-				speed = 0;
-				currentAcceleration = 0;
-			}
 
-			else if (m_x <= 0.1f) // If m_x <0 we have a catastrophic failure!
-				m_x = 0.1f;
-			else
 				lastDir = -1;
 		}
 	}
+	CheckSensors();
+	
+	if (speed != 0) {
+		newXPOS += speed * currentAcceleration;
+		m_x = newXPOS;
+	}
 
-	newXPOS += speed * currentAcceleration;
-
-	m_x = newXPOS;
 }
 
 void Sanic::Player::Jump() {
@@ -93,13 +80,7 @@ void Sanic::Player::Physics() {
 	float newYPOS = m_y;
 	float gravityForce = 0;
 
-	//First we check if the player is grounded!
-	if (Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x, m_y + 32) != 0 || Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x+16, m_y + 32) != 0) {
-		isGrounded = true;
-		//m_y = m_y-0.1;
-	}
-	else
-		isGrounded = false;
+	CheckSensors();
 
 	//Calculating the gravity.
 	if (!isGrounded) {
@@ -111,9 +92,6 @@ void Sanic::Player::Physics() {
 		gravityForce = 0;
 	}
 
-	//We check if our head is banging on a tile
-	if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x, m_y - 5))
-		jumpVelocity = 0;
 
 	//We decrease the jump velocity with time
 	if (isJumping) {
@@ -138,12 +116,12 @@ void Sanic::Player::Render(int camX, int camY) {
 	Sanic::_TextureManager::Instance()->DrawFrame("player", (int)m_x - camX, (int)m_y - camY, m_width, m_height, 0, 0, 0, Sanic::_Game::Instance()->getRenderer());
 
 	// Debug EntityCol
-	entityCollisionBox.x = (int)m_x + 5 - camX;
-	entityCollisionBox.y = (int)m_y - camY;
-	SDL_SetRenderDrawColor(Sanic::_Game::Instance()->getRenderer(), 116, 235, 87, 150);
-	SDL_RenderDrawRect(Sanic::_Game::Instance()->getRenderer(), &entityCollisionBox);
+	//entityCollisionBox.x = (int)m_x + 5 - camX;
+	//entityCollisionBox.y = (int)m_y - camY;
+	//SDL_SetRenderDrawColor(Sanic::_Game::Instance()->getRenderer(), 116, 235, 87, 150);
+	//SDL_RenderDrawRect(Sanic::_Game::Instance()->getRenderer(), &entityCollisionBox);
 	//Debug Col
-	CollisionBox.x = (int)m_x + 2 - camX;
+	CollisionBox.x = (int)m_x+8 - camX;
 	CollisionBox.y = (int)m_y - camY;
 	SDL_SetRenderDrawColor(Sanic::_Game::Instance()->getRenderer(), 255, 192, 203, 150);
 	SDL_RenderDrawRect(Sanic::_Game::Instance()->getRenderer(), &CollisionBox);
@@ -151,6 +129,66 @@ void Sanic::Player::Render(int camX, int camY) {
 
 SDL_Rect Sanic::Player::GetCollisionRect() {
 	return entityCollisionBox;
+}
+
+
+void Sanic::Player::CheckSensors() {
+
+	//Ground sensors
+	//A
+	if (Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorA[0]+1, m_y + sensorA[1]) || Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorB[0], m_y + sensorB[1]))
+		isGrounded = true;
+	else
+		isGrounded = false;
+
+	//Walls	
+	//Right
+	if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x + sensorF[0], m_y + sensorF[1]) && direction==1) {
+		currentAcceleration = 0;
+		speed = 0;
+		
+	}
+
+	//Left
+	if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x + sensorE[0], m_y + sensorE[1]) && direction==-1) {
+		currentAcceleration = 0;
+		speed = 0;
+	}
+
+	//Pushback
+	if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x + sensorE[0], m_y + sensorE[1]) && direction == -1) {//Left
+		
+		int block = std::floor((m_x + sensorE[0]) / 32);
+		block++;
+		m_x = block * 32 - sensorE[0];
+
+	}
+	if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x + sensorF[0], m_y + sensorF[1]) && direction == 1) {//Right
+
+		int block = std::floor((m_x + sensorF[0]) / 32);
+		block--;
+		m_x = block * 32 + sensorE[0];
+	}
+
+
+
+
+
+	if (isGrounded)
+		return; // We don't need to check head if we are grounded!
+
+	//Head
+	if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x + sensorC[0], m_y + sensorC[1]) || Sanic::_PhysicsManager::Instance()->IsColliding(m_x + sensorD[0], m_y + sensorD[1])) {
+		jumpVelocity = 0;
+		//Pushback
+		int block = std::floor((m_y + sensorC[1]) / 32);
+		block++;
+		m_y = block * 32 + sensorC[1];
+	}
+		
+
+		
+
 }
 
 void Sanic::Player::Destroy()

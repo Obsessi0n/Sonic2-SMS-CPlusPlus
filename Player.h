@@ -4,6 +4,8 @@
 #include "Entity.h"
 #include <SDL.h>
 #include <SDL_image.h>
+#include <vector>
+using namespace std;
 
 namespace Sanic {
 	class Player : public Entity {
@@ -39,10 +41,20 @@ namespace Sanic {
 		const float friction = 0.05f;
 		float currentAcceleration = acceleration;
 		SDL_Rect GetCollisionRect();
+
+
+		
+
+
 	private:
+
+		void CheckSensors();
 
 		uint32_t cameraOffset = 30;
 		char lastDir = 1;
+
+		const vector<int> sensorA = { 8,32 }, sensorB = { 24,32 };
+		vector<int> sensorC = { 8,0 }, sensorD = { 24,0 }, sensorE = { 8,16 }, sensorF = { 24,16 };
 	};
 }
 #endif
