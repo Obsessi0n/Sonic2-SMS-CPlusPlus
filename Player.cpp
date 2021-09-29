@@ -136,8 +136,22 @@ void Sanic::Player::CheckSensors() {
 
 	//Ground sensors
 	//A
-	if (Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorA[0]+1, m_y + sensorA[1]) || Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorB[0], m_y + sensorB[1]))
+	if ((Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorA[0] + 1, m_y + sensorA[1]) || Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorB[0] - 1, m_y + sensorB[1]))) {
 		isGrounded = true;
+
+		//if (Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorA[0] + 1, m_y + sensorA[1]+1) ==1 || Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorB[0] - 1, m_y + sensorB[1]+1) ==1){
+
+		//	if (Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorA[0] + 1, m_y + sensorA[1] + 4) != 2 && Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorB[0] - 1, m_y + sensorB[1] + 4) != 2) {
+		//		int block = std::floor((m_y + sensorA[1]) / 32);
+		//		block--;
+		//		m_y = block * 32;
+
+		//	}
+
+		//}
+
+		
+	}		
 	else
 		isGrounded = false;
 
@@ -178,7 +192,7 @@ void Sanic::Player::CheckSensors() {
 		return; // We don't need to check head if we are grounded!
 
 	//Head
-	if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x + sensorC[0], m_y + sensorC[1]) || Sanic::_PhysicsManager::Instance()->IsColliding(m_x + sensorD[0], m_y + sensorD[1])) {
+	if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x + sensorC[0], m_y + sensorC[1]) || Sanic::_PhysicsManager::Instance()->IsColliding(m_x + sensorD[0] - 1, m_y + sensorD[1])) {
 		jumpVelocity = 0;
 		//Pushback
 		int block = std::floor((m_y + sensorC[1]) / 32);
