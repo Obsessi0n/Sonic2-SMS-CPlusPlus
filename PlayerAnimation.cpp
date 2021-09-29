@@ -17,6 +17,11 @@ void Sanic::PlayerAnimation::UpdateState()
 	{
 		state = PlayerState::Jumping;
 	}
+
+	else if (Sanic::_Game::Instance()->getPlayer()->IsChangingDirection())
+	{
+		state = PlayerState::Skidding;
+	}
 }
 
 void Sanic::PlayerAnimation::Render(int camX, int camY)
@@ -28,10 +33,32 @@ void Sanic::PlayerAnimation::Render(int camX, int camY)
 	}
 	else if (state == PlayerState::Running)
 	{
-		Sanic::_TextureManager::Instance()->DrawAnimation("player", (int)Sanic::_Game::Instance()->getPlayer()->getPosX() - camX, (int)Sanic::_Game::Instance()->getPlayer()->getPosY() - camY, (int)Sanic::_Game::Instance()->getPlayer()->getWidth(), (int)Sanic::_Game::Instance()->getPlayer()->getHeight(), 0, 1, 5, 200, Sanic::_Game::Instance()->getRenderer());
+		if (Sanic::_Game::Instance()->getPlayer()->GetSpeed() == - 1)
+		{
+			Sanic::_TextureManager::Instance()->DrawAnimation("player", (int)Sanic::_Game::Instance()->getPlayer()->getPosX() - camX, (int)Sanic::_Game::Instance()->getPlayer()->getPosY() - camY, (int)Sanic::_Game::Instance()->getPlayer()->getWidth(), (int)Sanic::_Game::Instance()->getPlayer()->getHeight(), 0, 1, 5, 200, Sanic::_Game::Instance()->getRenderer(), SDL_FLIP_HORIZONTAL);
+		}
+		else 
+		{
+			Sanic::_TextureManager::Instance()->DrawAnimation("player", (int)Sanic::_Game::Instance()->getPlayer()->getPosX() - camX, (int)Sanic::_Game::Instance()->getPlayer()->getPosY() - camY, (int)Sanic::_Game::Instance()->getPlayer()->getWidth(), (int)Sanic::_Game::Instance()->getPlayer()->getHeight(), 0, 1, 5, 200, Sanic::_Game::Instance()->getRenderer());
+		}
 	}
-	else if (state == PlayerState::Jumping)
+	if (state == PlayerState::Jumping)
 	{
 		Sanic::_TextureManager::Instance()->DrawAnimation("player", (int)Sanic::_Game::Instance()->getPlayer()->getPosX() - camX, (int)Sanic::_Game::Instance()->getPlayer()->getPosY() - camY, (int)Sanic::_Game::Instance()->getPlayer()->getWidth(), (int)Sanic::_Game::Instance()->getPlayer()->getHeight(), 0, 3, 4, 100, Sanic::_Game::Instance()->getRenderer());
+	}
+	else if (state == PlayerState::Rolling)
+	{
+		Sanic::_TextureManager::Instance()->DrawAnimation("player", (int)Sanic::_Game::Instance()->getPlayer()->getPosX() - camX, (int)Sanic::_Game::Instance()->getPlayer()->getPosY() - camY, (int)Sanic::_Game::Instance()->getPlayer()->getWidth(), (int)Sanic::_Game::Instance()->getPlayer()->getHeight(), 0, 3, 5, 100, Sanic::_Game::Instance()->getRenderer());
+	}
+	else if (state == PlayerState::Skidding)
+	{
+		if (Sanic::_Game::Instance()->getPlayer()->GetSpeed() == -1)
+		{
+			Sanic::_TextureManager::Instance()->DrawAnimation("player", (int)Sanic::_Game::Instance()->getPlayer()->getPosX() - camX, (int)Sanic::_Game::Instance()->getPlayer()->getPosY() - camY, (int)Sanic::_Game::Instance()->getPlayer()->getWidth(), (int)Sanic::_Game::Instance()->getPlayer()->getHeight(), 0, 5, 2, 100, Sanic::_Game::Instance()->getRenderer(), SDL_FLIP_HORIZONTAL);
+		}
+		else 
+		{
+			Sanic::_TextureManager::Instance()->DrawAnimation("player", (int)Sanic::_Game::Instance()->getPlayer()->getPosX() - camX, (int)Sanic::_Game::Instance()->getPlayer()->getPosY() - camY, (int)Sanic::_Game::Instance()->getPlayer()->getWidth(), (int)Sanic::_Game::Instance()->getPlayer()->getHeight(), 0, 5, 2, 200, Sanic::_Game::Instance()->getRenderer());
+		}
 	}
 }

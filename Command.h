@@ -14,6 +14,12 @@ namespace Sanic {
 		virtual void execute() { Sanic::_Game::Instance()->getPlayer()->Jump(); };
 	};
 
+	class RollingCommand : public Command
+	{
+	public:
+		virtual void execute() { };
+	};
+
 	class MoveLeftCommand : public Command {
 	public:
 		virtual void execute() { Sanic::_Game::Instance()->getPlayer()->HorizontalMovementDir(-1); };
@@ -23,7 +29,6 @@ namespace Sanic {
 	public:
 		virtual void execute() { Sanic::_Game::Instance()->getPlayer()->HorizontalMovementDir(1); };
 	};
-
 
 	class StopMovement : public Command {
 	public:

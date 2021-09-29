@@ -23,7 +23,7 @@ void Sanic::Ring::Physics()
 
 void Sanic::Ring::Render(int camX, int camY)
 {
-	ringCol = { (int)m_x - camX, (int)m_y - camY, m_width, m_height };
+	entityCollisionBox = { (int)m_x - camX, (int)m_y - camY, m_width, m_height };
 	if (!GetCollected())
 	{
 		Sanic::_TextureManager::Instance()->DrawAnimation("ring", (int)m_x - camX, (int)m_y - camY, m_width, m_height, 0, 0, 4, 200, Sanic::_Game::Instance()->getRenderer());
@@ -35,6 +35,6 @@ void Sanic::Ring::Render(int camX, int camY)
 }
 
 void Sanic::Ring::CheckCollision() {	
-	if (Sanic::_CollisionManager::Instance()->CheckCollision(ringCol, Sanic::_Game::Instance()->getPlayer()->GetCollisionRect()))
+	if (Sanic::_CollisionManager::Instance()->CheckCollision(entityCollisionBox, Sanic::_Game::Instance()->getPlayer()->GetCollisionRect()))
 		return SetCollected(true);
 }

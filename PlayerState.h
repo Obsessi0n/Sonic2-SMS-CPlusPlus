@@ -6,6 +6,7 @@ enum class PlayerState
 	Jumping,
 	Airborne,
 	Rolling,
+	Skidding,
 	Hurt
 };
 

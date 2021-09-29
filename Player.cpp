@@ -32,8 +32,13 @@ void Sanic::Player::Move() {
 	//Player changed direction
 	if (direction != lastDir && currentAcceleration > 0) {
 		currentAcceleration -= decelaration;
+		isChangingDirection = true;
 		if (currentAcceleration < 0)
+		{
 			currentAcceleration = 0;
+			isChangingDirection = false;
+		}
+			
 	}
 	else if (direction == 0) { //If player is not pressing left or right
 		currentAcceleration -= friction;

@@ -24,6 +24,7 @@ namespace Sanic {
 		Command* Z_ = new JumpCommand;
 		Command* arrowLeft_ = new MoveLeftCommand;
 		Command* arrowRight_ = new MoveRightCommand;
+		Command* arrowDown_ = new RollingCommand;
 		Command* noArrow_ = new StopMovement;
 
 		static InputManager* instance;
