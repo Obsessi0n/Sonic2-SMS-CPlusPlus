@@ -44,7 +44,7 @@ void Sanic::PlayerAnimation::Render(int camX, int camY)
 	}
 	if (state == PlayerState::Jumping)
 	{
-		Sanic::_TextureManager::Instance()->DrawAnimation("player", (int)Sanic::_Game::Instance()->getPlayer()->getPosX() - camX, (int)Sanic::_Game::Instance()->getPlayer()->getPosY() - camY, (int)Sanic::_Game::Instance()->getPlayer()->getWidth(), (int)Sanic::_Game::Instance()->getPlayer()->getHeight(), 0, 3, 4, 100, Sanic::_Game::Instance()->getRenderer());
+		Sanic::_TextureManager::Instance()->DrawAnimation("player", (int)Sanic::_Game::Instance()->getPlayer()->getPosX() - camX, (int)Sanic::_Game::Instance()->getPlayer()->getPosY() - camY, (int)Sanic::_Game::Instance()->getPlayer()->getWidth(), (int)Sanic::_Game::Instance()->getPlayer()->getHeight(), 0, 3, 4, 50, Sanic::_Game::Instance()->getRenderer());
 	}
 	else if (state == PlayerState::Rolling)
 	{
