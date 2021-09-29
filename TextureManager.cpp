@@ -21,6 +21,12 @@ bool Sanic::TextureManager::Load(std::string fileName, std::string id, SDL_Rende
 		return false;
 	}
 
+	if (spritesheet[id] == texture)
+	{
+		std::cerr << "Texture already loaded!" << '\n';
+		return false;
+	}
+
 	spritesheet[id] = texture;
     return false;
 }
@@ -59,7 +65,11 @@ void Sanic::TextureManager::DrawAnimation(std::string id, int x, int y, int w, i
 {
 	SDL_Rect srcRect, destRect;
 	uint32_t ticks = SDL_GetTicks();
-	uint32_t currentFrame = (ticks / speed) % frameAmount;
+	uint32_t currentFrame = 0;
+	if (speed != 0)
+	{
+		currentFrame = (ticks / speed) % frameAmount;
+	}
 
 	srcRect.x = w * currentFrame;
 	srcRect.y = h * currentRow;

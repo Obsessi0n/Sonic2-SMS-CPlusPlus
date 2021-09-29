@@ -12,6 +12,8 @@ Sanic::Player::Player()
 
 	m_y = Sanic::_Game::Instance()->getResWidth() / 2 - (m_width / 2) - 60;
 
+	playerAnim = new PlayerAnimation;
+
 	entityCollisionBox = { (int)m_x, (int)m_y, 8, 32 };
 	CollisionBox = { (int)m_x, (int)m_y, 16, 32 };
 }
@@ -66,7 +68,6 @@ void Sanic::Player::Move() {
 		newXPOS += speed * currentAcceleration;
 		m_x = newXPOS;
 	}
-
 }
 
 void Sanic::Player::Jump() {
@@ -109,11 +110,15 @@ void Sanic::Player::Physics() {
 void Sanic::Player::Update()
 {
 	Move();
+	playerAnim->UpdateState();
 	Physics();
 }
 
 void Sanic::Player::Render(int camX, int camY) {
-	Sanic::_TextureManager::Instance()->DrawFrame("player", (int)m_x - camX, (int)m_y - camY, m_width, m_height, 0, 0, 0, Sanic::_Game::Instance()->getRenderer());
+
+	playerAnim->Render(camX, camY);
+	
+	//animSpeed = 100 - (currentAcceleration * 50 / maxSpeed);
 
 	// Debug EntityCol
 	//entityCollisionBox.x = (int)m_x + 5 - camX;

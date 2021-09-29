@@ -2,6 +2,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 #include "Entity.h"
+#include "PlayerAnimation.h"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <vector>
@@ -31,6 +32,10 @@ namespace Sanic {
 		int getWidth() { return m_width; };
 		int getHeight() { return m_height; };
 
+
+
+		float GetAcceleration() { return currentAcceleration; };
+
 		void Destroy() override;
 
 		const float maxSpeed = 2.2f;
@@ -41,13 +46,9 @@ namespace Sanic {
 		const float friction = 0.05f;
 		float currentAcceleration = acceleration;
 		SDL_Rect GetCollisionRect();
-
-
-		
-
-
 	private:
 
+		PlayerAnimation* playerAnim;
 		void CheckSensors();
 
 		uint32_t cameraOffset = 30;

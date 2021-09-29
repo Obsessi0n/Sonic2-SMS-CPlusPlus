@@ -19,6 +19,8 @@ namespace Sanic {
 
 		void setX(int x) { m_x = x; };
 		void setY(int y) { m_y = y; };
+
+		bool IsJumping() { return isJumping; };
 	protected:
 		float m_x = 0;
 		float m_y = 0;

@@ -66,8 +66,8 @@ namespace Sanic {
 		UserInterface* userInterface;
 		EntityManager* entityManager;
 
-		const int SCREEN_WIDTH = 256;
-		const int SCREEN_HEIGHT = 196;
+		const int SCREEN_WIDTH = 256 * 4;
+		const int SCREEN_HEIGHT = 196 * 4;
 
 		const int RES_WIDTH = 256;
 		const int RES_HEIGHT = 196;
@@ -84,4 +84,3 @@ namespace Sanic {
 }
 
 #endif
-
