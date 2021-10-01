@@ -6,7 +6,6 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <vector>
-using namespace std;
 
 namespace Sanic {
 	class Player : public Entity {
@@ -55,8 +54,8 @@ namespace Sanic {
 		char lastDir = 1;
 		bool isChangingDirection = false;
 
-		const vector<int> sensorA = { 8,32 }, sensorB = { 24,32 };
-		vector<int> sensorC = { 8,0 }, sensorD = { 24,0 }, sensorE = { 8,16 }, sensorF = { 24,16 };
+		const std::vector<int> sensorA = { 8,32 }, sensorB = { 24,32 };
+		std::vector<int> sensorC = { 8,0 }, sensorD = { 24,0 }, sensorE = { 8,16 }, sensorF = { 24,16 };
 	};
 }
 #endif

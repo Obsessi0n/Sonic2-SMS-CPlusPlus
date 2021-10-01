@@ -169,10 +169,10 @@ void Sanic::Player::CheckSensors() {
 			if(m_y < ySlopePos)
 				OnSlope(&ySlopePos);
 
-			cout << "Slope";
+			std::cout << "Standing on a Slope" << '\n';
 		}
 		else {
-			cout << "Ground";
+			std::cout << "Standing on the Ground" << '\n';
 			//IS player inside ground?
 			if (std::floor(yLiteralPos / 32) == std::floor((m_y + sensorA[1]) / 32)) {
 				m_y = (std::floor(yLiteralPos / 32) - 1) * 32;
