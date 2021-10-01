@@ -23,6 +23,7 @@ namespace Sanic {
 		bool IsColliding(float const& xLiteralPosition, float const& yLiteralPosition);
 		bool CheckIfGrounded(float const& xLiteralPosition,float const& yLiteralPosition);
 		int CalculateSlope(int const& xBlock, int const& yBlock);
+		int CalculateSlope(float const& xLiteralPos, float const& yLiteralPos);
 	private:
 		static PhysicsManager* instance;
 		const float GRAVITY = 30;

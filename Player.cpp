@@ -146,51 +146,69 @@ void Sanic::Player::CheckSensors() {
 
 	//Ground sensors
 	//A B
-	if ((Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorA[0] + 1, m_y + sensorA[1]) || Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorB[0] - 1, m_y + sensorB[1]))) {
-		isGrounded = true;
-	}
-	else if ((Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorA[0] + 1, m_y + sensorA[1])==2 || Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorB[0] - 1, m_y + sensorB[1])==2))
-		isGrounded = true;
-	else
-		isGrounded = false;
+	//if ((Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorA[0] + 1, m_y + sensorA[1]) || Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorB[0] - 1, m_y + sensorB[1]))) {
+	//	isGrounded = true;
+	//}
+	//else if ((Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorA[0] + 1, m_y + sensorA[1])==2 || Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorB[0] - 1, m_y + sensorB[1])==2))
+	//	isGrounded = true;
+	//else
+	//	isGrounded = false;
 
 
 
-	if (Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorB[0] - 1, m_y + sensorB[1]) != 0) {
+	if (Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorA[0] - 1, m_y + sensorA[1]) != 0) {
 		isGrounded = true;
-		const float xLiteralPos = m_x + sensorB[0] - 1;
-		const float yLiteralPos = m_y + sensorB[1];
-		if (Sanic::_Game::Instance()->getMapLoader()->GetBlockType(xLiteralPos, yLiteralPos)== 2){
-	
+
+		const float xLiteralPos = m_x + sensorA[0] - 1;
+		const float yLiteralPos = m_y + sensorA[1];
+
+		if (Sanic::_Game::Instance()->getMapLoader()->GetBlockType(xLiteralPos, yLiteralPos) == 2) {
+			//SLOPE
+			int ySlopePos = Sanic::_PhysicsManager::Instance()->CalculateSlope(xLiteralPos, yLiteralPos);
+
+			if(m_y < ySlopePos)
+				OnSlope(&ySlopePos);
+
+			cout << "Slope";
+		}
+		else {
+			cout << "Ground";
+			//IS player inside ground?
+			if (std::floor(yLiteralPos / 32) == std::floor((m_y + sensorA[1]) / 32)) {
+				m_y = (std::floor(yLiteralPos / 32) - 1) * 32;
+			}
 		}
 	}
-
+	else {
+		isGrounded = false;
+	}
+		
 
 	//Check for slopes
-	if (isGrounded && !isJumping) {
-		if (Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorA[0] + 1, m_y + sensorA[1]) == 2) {
+	//if (isGrounded && !isJumping) {
+	//	if (Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorA[0] + 1, m_y + sensorA[1]) == 2) {
 
-			//Convert Literal Position to block.
-			int xBlock = std::floor(m_x + sensorA[0] + 1) / Sanic::_Game::Instance()->getTileSize();
-			int yBlock = std::floor(m_y + sensorA[1]) / Sanic::_Game::Instance()->getTileSize();
-			int slopeY = Sanic::_PhysicsManager::Instance()->CalculateSlope(xBlock, yBlock);
-			OnSlope(&slopeY);
+	//		//Convert Literal Position to block.
+	//		int xBlock = std::floor(m_x + sensorA[0] + 1) / Sanic::_Game::Instance()->getTileSize();
+	//		int yBlock = std::floor(m_y + sensorA[1]) / Sanic::_Game::Instance()->getTileSize();
+	//		int slopeY = Sanic::_PhysicsManager::Instance()->CalculateSlope(xBlock, yBlock);
+	//		OnSlope(&slopeY);
 
-		}
-	
-		
-		else if (Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorB[0] - 1, m_y + sensorB[1]) == 2) {
-			//Convert Literal Position to block.
-			int xBlock = std::floor((m_x + sensorB[0] - 1 )/ Sanic::_Game::Instance()->getTileSize());
-			int yBlock = std::floor((m_y + sensorB[1]) / Sanic::_Game::Instance()->getTileSize());
+	//	}
+	//
+	//	
+	//	else if (Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorB[0] - 1, m_y + sensorB[1]) == 2) {
+	//		//Convert Literal Position to block.
+	//		int xBlock = std::floor((m_x + sensorB[0] - 1 )/ Sanic::_Game::Instance()->getTileSize());
+	//		int yBlock = std::floor((m_y + sensorB[1]) / Sanic::_Game::Instance()->getTileSize());
 
-			int slopeY = Sanic::_PhysicsManager::Instance()->CalculateSlope(xBlock, yBlock);
-		
-			OnSlope(&slopeY);
-			
+	//		int slopeY = Sanic::_PhysicsManager::Instance()->CalculateSlope(xBlock, yBlock);
+	//	
+	//		OnSlope(&slopeY);
+	//		
 
-		}
-	}
+	//	}
+	//}
 
 
 

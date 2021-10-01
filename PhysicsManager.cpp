@@ -124,3 +124,11 @@ int Sanic::PhysicsManager::CalculateSlope(int const& xBlock, int const& yBlock) 
 
 }
 
+int Sanic::PhysicsManager::CalculateSlope(float const& xLiteralPos, float const& yLiteralPos) {
+
+	//Convert Literal Position to block.
+	int xBlock = std::floor(xLiteralPos / Sanic::_Game::Instance()->getTileSize());
+	int yBlock = std::floor(yLiteralPos / Sanic::_Game::Instance()->getTileSize());
+
+	return CalculateSlope(xBlock, yBlock);
+}
