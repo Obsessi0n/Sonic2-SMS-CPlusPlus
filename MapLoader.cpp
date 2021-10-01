@@ -158,7 +158,12 @@ char Sanic::MapLoader::GetBlockType(int const& xBlock, int const& yBlock) {
     //If we get here the block is not solid
     return 0;
 }
-
+char Sanic::MapLoader::GetBlockType(float const& xLiteralPos, float const& yLiteralPos) {
+    //Convert Literal Position to block.
+    int xBlock = std::floor(xLiteralPos / Sanic::_Game::Instance()->getTileSize());
+    int yBlock = std::floor(yLiteralPos / Sanic::_Game::Instance()->getTileSize());
+    return GetBlockType(xBlock, yBlock);
+}
 
 /*
 I Hate this, it's super not efficient we are opening the file again and searching for the block

@@ -26,6 +26,8 @@ namespace Sanic {
 
 		char GetBlockType(int const&  x,int const& y);
 
+		char GetBlockType(float const& xLiteralPos, float const& yLiteralpos);
+
 		int GetMapSizeY() { return mapLayoutData.size(); };
 		std::string GetBlockID(int const& xBlock, int const& yBlock);
 	private:

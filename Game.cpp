@@ -44,6 +44,7 @@ void Sanic::Game::handleEvents()
 
 void Sanic::Game::update()
 {
+
 	player->Update();
 	camera.x = (player->getPosX() + player->getWidth() / 2) - RES_WIDTH / 2;
 	camera.y = (player->getPosY() + player->getHeight() / 2) - RES_HEIGHT / 2;

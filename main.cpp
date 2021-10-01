@@ -5,6 +5,7 @@ const double MS_PER_UPDATE = 16.6666666667;
 
 int main(int argc, char* args[])
 {
+	
 	if (Sanic::_Game::Instance()->init("Sanic", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SDL_WINDOW_SHOWN))
 	{
 		std::cout << "Game initialized" << '\n';

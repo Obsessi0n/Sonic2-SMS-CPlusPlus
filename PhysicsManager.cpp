@@ -47,11 +47,11 @@ bool Sanic::PhysicsManager::IsColliding(float const& xLiteralPosition, float con
 	}
 	//Checking for slope
 	else if (Sanic::_Game::Instance()->getMapLoader()->GetBlockType(xBlock, yBlock) == 2) {
-		int slopeY = CalculateSlope(xBlock, yBlock);
+		//int slopeY = CalculateSlope(xBlock, yBlock);
 
-		if (Sanic::_Game::Instance()->getPlayer()->getPosY() + 32 >= slopeY) {
-			Sanic::_Game::Instance()->getPlayer()->OnSlope(&slopeY);			
-		}
+		//if (Sanic::_Game::Instance()->getPlayer()->getPosY() + 32 >= slopeY) {
+		//	Sanic::_Game::Instance()->getPlayer()->OnSlope(&slopeY);			
+		//}
 	}
 	
 
@@ -64,14 +64,13 @@ bool Sanic::PhysicsManager::IsColliding(float const& xLiteralPosition, float con
 * Floor = 1
 * Slope = 2
 */
-char Sanic::PhysicsManager::CheckIfGrounded(float const& xLiteralPosition, const float& yLiteralPosition) {
+bool Sanic::PhysicsManager::CheckIfGrounded(float const& xLiteralPosition, const float& yLiteralPosition) {
 
 	//cout << "Player y: " << xLiteralPosition << '\n';
 
 	//Convert Literal Position to block.
 	int xBlock = std::floor(xLiteralPosition / Sanic::_Game::Instance()->getTileSize());
-	int yBlock = std::floor(yLiteralPosition / Sanic::_Game::Instance()->getTileSize());;
-
+	int yBlock = std::floor(yLiteralPosition / Sanic::_Game::Instance()->getTileSize());
 	
 
 	char blockType = 0;
@@ -88,10 +87,11 @@ char Sanic::PhysicsManager::CheckIfGrounded(float const& xLiteralPosition, const
 	else if (blockType == 2) {
 		int slopeY = CalculateSlope(xBlock, yBlock);
 
-		if (Sanic::_Game::Instance()->getPlayer()->getPosY() + 32 >= slopeY) {
-			Sanic::_Game::Instance()->getPlayer()->OnSlope(&slopeY);
-			return 2;
-		}
+		//if (Sanic::_Game::Instance()->getPlayer()->getPosY() + 32 >= slopeY) {
+		//	Sanic::_Game::Instance()->getPlayer()->OnSlope(&slopeY);
+		//	return 2;
+		//}
+		return 1;
 			
 	}
 	return 0;

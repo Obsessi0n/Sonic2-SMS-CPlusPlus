@@ -122,7 +122,7 @@ void Sanic::Player::Update()
 void Sanic::Player::Render(int camX, int camY) {
 
 	playerAnim->Render(camX, camY);
-	
+
 	//animSpeed = 100 - (currentAcceleration * 50 / maxSpeed);
 
 	// Debug EntityCol
@@ -131,7 +131,7 @@ void Sanic::Player::Render(int camX, int camY) {
 	//SDL_SetRenderDrawColor(Sanic::_Game::Instance()->getRenderer(), 116, 235, 87, 150);
 	//SDL_RenderDrawRect(Sanic::_Game::Instance()->getRenderer(), &entityCollisionBox);
 	//Debug Col
-	CollisionBox.x = (int)m_x+8 - camX;
+	CollisionBox.x = (int)m_x + 8 - camX;
 	CollisionBox.y = (int)m_y - camY;
 	SDL_SetRenderDrawColor(Sanic::_Game::Instance()->getRenderer(), 255, 192, 203, 150);
 	SDL_RenderDrawRect(Sanic::_Game::Instance()->getRenderer(), &CollisionBox);
@@ -145,36 +145,75 @@ SDL_Rect Sanic::Player::GetCollisionRect() {
 void Sanic::Player::CheckSensors() {
 
 	//Ground sensors
-	//A
+	//A B
 	if ((Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorA[0] + 1, m_y + sensorA[1]) || Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorB[0] - 1, m_y + sensorB[1]))) {
 		isGrounded = true;
-
-		//if (Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorA[0] + 1, m_y + sensorA[1]+1) ==1 || Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorB[0] - 1, m_y + sensorB[1]+1) ==1){
-
-		//	if (Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorA[0] + 1, m_y + sensorA[1] + 4) != 2 && Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorB[0] - 1, m_y + sensorB[1] + 4) != 2) {
-		//		int block = std::floor((m_y + sensorA[1]) / 32);
-		//		block--;
-		//		m_y = block * 32;
-
-		//	}
-
-		//}
-
-		
-	}		
+	}
+	else if ((Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorA[0] + 1, m_y + sensorA[1])==2 || Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorB[0] - 1, m_y + sensorB[1])==2))
+		isGrounded = true;
 	else
 		isGrounded = false;
 
+
+
+	if (Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorB[0] - 1, m_y + sensorB[1]) != 0) {
+		isGrounded = true;
+		const float xLiteralPos = m_x + sensorB[0] - 1;
+		const float yLiteralPos = m_y + sensorB[1];
+		if (Sanic::_Game::Instance()->getMapLoader()->GetBlockType(xLiteralPos, yLiteralPos)== 2){
+	
+		}
+	}
+
+
+	//Check for slopes
+	if (isGrounded && !isJumping) {
+		if (Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorA[0] + 1, m_y + sensorA[1]) == 2) {
+
+			//Convert Literal Position to block.
+			int xBlock = std::floor(m_x + sensorA[0] + 1) / Sanic::_Game::Instance()->getTileSize();
+			int yBlock = std::floor(m_y + sensorA[1]) / Sanic::_Game::Instance()->getTileSize();
+			int slopeY = Sanic::_PhysicsManager::Instance()->CalculateSlope(xBlock, yBlock);
+			OnSlope(&slopeY);
+
+		}
+	
+		
+		else if (Sanic::_PhysicsManager::Instance()->CheckIfGrounded(m_x + sensorB[0] - 1, m_y + sensorB[1]) == 2) {
+			//Convert Literal Position to block.
+			int xBlock = std::floor((m_x + sensorB[0] - 1 )/ Sanic::_Game::Instance()->getTileSize());
+			int yBlock = std::floor((m_y + sensorB[1]) / Sanic::_Game::Instance()->getTileSize());
+
+			int slopeY = Sanic::_PhysicsManager::Instance()->CalculateSlope(xBlock, yBlock);
+		
+			OnSlope(&slopeY);
+			
+
+		}
+	}
+
+
+
+
 	//Walls	
 	//Right
-	if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x + sensorF[0], m_y + sensorF[1]) && direction==1) {
+	if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x + sensorF[0], m_y + sensorF[1]) && direction == 1) {
 		currentAcceleration = 0;
 		speed = 0;
-		
+
+	}
+	else if (!isGrounded && Sanic::_PhysicsManager::Instance()->IsColliding(m_x + sensorD[0], m_y + sensorD[1]) && direction == 1){
+		currentAcceleration = 0;
+		speed = 0;
+
 	}
 
 	//Left
 	if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x + sensorE[0], m_y + sensorE[1]) && direction==-1) {
+		currentAcceleration = 0;
+		speed = 0;
+	}
+	else if (!isGrounded && Sanic::_PhysicsManager::Instance()->IsColliding(m_x + sensorC[0], m_y + sensorC[1]) && direction == -1) {
 		currentAcceleration = 0;
 		speed = 0;
 	}
@@ -221,5 +260,6 @@ void Sanic::Player::Destroy()
 }
 
 void Sanic::Player::OnSlope(int* yPos) {
-	m_y = (float)*yPos - 32;
+
+		m_y = (float)*yPos - 32;
 }
