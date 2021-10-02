@@ -85,7 +85,7 @@ bool Sanic::PhysicsManager::CheckIfGrounded(float const& xLiteralPosition, const
 	}
 	
 	else if (blockType == 2) {
-		int slopeY = CalculateSlope(xBlock, yBlock);
+		//int slopeY = CalculateSlope(xBlock, yBlock);
 
 		//if (Sanic::_Game::Instance()->getPlayer()->getPosY() + 32 >= slopeY) {
 		//	Sanic::_Game::Instance()->getPlayer()->OnSlope(&slopeY);
@@ -105,8 +105,6 @@ int Sanic::PhysicsManager::CalculateSlope(int const& xBlock, int const& yBlock) 
 	//First we need to get the yStart and yEnd
 	Sanic::_Game::Instance()->getMapLoader()->GetSlopeStartEnd(&yStart, &yEnd, xBlock, yBlock);
 
-
-
 	//Find b
 	int b = yStart;
 
@@ -118,7 +116,7 @@ int Sanic::PhysicsManager::CalculateSlope(int const& xBlock, int const& yBlock) 
 	//y = mx+b
 
 	//Slope y on the x
-	int slopeY = (m * (Sanic::_Game::Instance()->getPlayer()->getPosX() - (32 * xBlock)) + b) + (yBlock * 32);
+	int slopeY = (m * (Sanic::_Game::Instance()->getPlayer()->getPosX()+16 - (32 * xBlock)) + b) + (yBlock * 32);
 
 	return slopeY;
 
@@ -131,4 +129,17 @@ int Sanic::PhysicsManager::CalculateSlope(float const& xLiteralPos, float const&
 	int yBlock = std::floor(yLiteralPos / Sanic::_Game::Instance()->getTileSize());
 
 	return CalculateSlope(xBlock, yBlock);
+}
+
+bool Sanic::PhysicsManager::CheckIfSlope(float const& xLiteralPos, float const& yLiteralPos) {
+	int xBlock = std::floor(xLiteralPos / Sanic::_Game::Instance()->getTileSize());
+	int yBlock = std::floor(yLiteralPos / Sanic::_Game::Instance()->getTileSize());
+	char blockType = 0;
+	//We check the tile
+	if (Sanic::_Game::Instance()->getMapLoader()->GetBlockType(xBlock, yBlock) == 2)
+		return true;
+
+	return false;
+
+
 }

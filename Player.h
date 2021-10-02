@@ -54,7 +54,7 @@ namespace Sanic {
 		char lastDir = 1;
 		bool isChangingDirection = false;
 
-		const std::vector<int> sensorA = { 8,32 }, sensorB = { 24,32 };
+		const std::vector<int> sensorA = { 8,32 }, sensorB = { 24,32 }, sensorS = { 16,32 };
 		std::vector<int> sensorC = { 8,0 }, sensorD = { 24,0 }, sensorE = { 8,16 }, sensorF = { 24,16 };
 	};
 }
