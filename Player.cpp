@@ -144,7 +144,7 @@ void Sanic::Player::CheckSensors() {
 		//Are we on a slope?
 		if (Sanic::_PhysicsManager::Instance()->CheckIfSlope(sensorS[0] + m_x, sensorS[1] + m_y) ||
 			 Sanic::_PhysicsManager::Instance()->CheckIfSlope(sensorS[0] + m_x, sensorS[1] + m_y - 2)) {
-			std::cout << "OnSLope!";
+
 			//Calculate y!
 			int slopeY = Sanic::_PhysicsManager::Instance()->CalculateSlope(m_x + sensorS[0], m_y + sensorS[1]);	
 

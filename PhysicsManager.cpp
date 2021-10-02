@@ -38,8 +38,11 @@ bool Sanic::PhysicsManager::IsColliding(float const& xLiteralPosition, float con
 	//If player is outside bounds on the Y
 	if (yBlock + playerSizeTile > Sanic::_Game::Instance()->getMapLoader()->GetMapSizeY())
 		return true;
-	else if (yLiteralPosition <= 5) //if y < 0 we are in big shit. Player will be out of bounds and SDL will crash.
+	else if (yLiteralPosition <= 32) //if y < 0 we are in big shit. Player will be out of bounds and SDL will crash.
 		return true;
+	else if (xLiteralPosition <= 5)
+		return true;
+
 
 	//Now we check the map for solid block
 	if (Sanic::_Game::Instance()->getMapLoader()->GetBlockType(xBlock, yBlock) == 1) {
