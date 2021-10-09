@@ -34,6 +34,11 @@ bool Sanic::Game::init(const char* title, int x, int y, int flags) {
 	entityManager->LoadEntities("assets/entities.txt");
 
 	SDL_RenderSetLogicalSize(renderer, RES_WIDTH, RES_HEIGHT);
+
+	//Start clock  timer
+	startTime = time(&timer);
+
+
 	return true;
 }
 
@@ -44,6 +49,7 @@ void Sanic::Game::handleEvents()
 
 void Sanic::Game::update()
 {
+	GameTimer();
 
 	player->Update();
 	camera.x = (player->getPosX() + player->getWidth() / 2) - RES_WIDTH / 2;
@@ -98,4 +104,30 @@ void Sanic::Game::clean()
 void Sanic::Game::quit()
 {
 	is_running = false;
+}
+
+void Sanic::Game::changePlayerRings(int *amount) {
+	playerRings += *amount;
+	if (playerRings > 99) {
+		playerRings = 0;
+		//Add extra life!
+		int i = 1;
+		changePlayerLives(&i);
+	}
+}
+
+void Sanic::Game::changePlayerLives(int* amount) {
+	playerLives += *amount;
+	if (playerLives < 0) {
+		playerLives = 0;
+		//GameOver
+	}
+}
+
+
+
+void Sanic::Game::GameTimer() {
+	
+	time(&timer);  /* get current time; same as: timer = time(NULL)  */
+	timeSinceStart = difftime(timer, startTime);
 }

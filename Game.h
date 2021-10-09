@@ -53,6 +53,13 @@ namespace Sanic {
 
 		SDL_Rect camera;
 
+		int getPlayerRings() const { return playerRings; };
+		int getPlayerLives() const { return playerLives; };
+
+		void changePlayerRings(int *amount);
+		void changePlayerLives(int* amount);
+		double getTimeSinceStart() { return timeSinceStart; };
+
 	private:
 		static Game* instance;
 
@@ -78,6 +85,15 @@ namespace Sanic {
 		int level_height = 768;
 
 		bool is_running = true;
+
+		int playerRings = 0;
+		int playerLives = 3;
+
+		void GameTimer();
+
+		time_t timer;
+		int startTime = 0;
+		double timeSinceStart=0;
 	};
 
 	typedef Game _Game;

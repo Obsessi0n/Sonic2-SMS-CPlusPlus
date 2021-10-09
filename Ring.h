@@ -12,12 +12,16 @@ namespace Sanic {
 		void Physics() override;
 		void Render(int camX, int camY) override;
 
-		bool GetCollected() { return collected; };
+		bool IsCollected() { return collected; };
+
 		void SetCollected(bool c) { collected = c; };
 		bool isStatic() { return staticRing; };
 	private:
 		bool collected = false;
 		bool staticRing = false;
 		SDL_Rect ringCol;
+
+		int ringValue = 1;
+		void GetCollected();
 	};
 }

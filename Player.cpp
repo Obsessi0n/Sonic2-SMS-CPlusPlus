@@ -153,17 +153,20 @@ void Sanic::Player::CheckSensors() {
 				isGrounded = true;				
 			}
 			else
-				isGrounded = false;		
+				isGrounded = false;	
+
+			//Slope pushback
+			//Goes here
 		}
 		else {
 			isGrounded = true;
 			//pushback if inside
-	/*		if ((std::floor((m_y + 32) / 32)) > (std::floor((m_y + sensorA[1]) / 32)) && !isJumping) {
+			if ((std::floor((m_y + 32) / 32)) > (std::floor((m_y + sensorA[1]) / 32)) && !isJumping) {
 				int floorBlock = std::floor((m_y + sensorA[1]) / 32);
 				int playerBlock = floorBlock - 1;
 				m_y = playerBlock*32 -1 ;
 				std::cout << "Inside";
-			}*/
+			}
 				
 		}
 	}
@@ -211,9 +214,9 @@ void Sanic::Player::CheckSensors() {
 		 Sanic::_PhysicsManager::Instance()->IsColliding(m_x + sensorD[0]-2, m_y + sensorD[1])) {
 		jumpVelocity = 0;
 		//Pushback
-		//int block = std::floor((m_y + sensorC[1]) / 32);
-		//block++;
-		//m_y = block * 32 + sensorC[1];
+		int block = std::floor((m_y + sensorC[1]) / 32);
+		block++;
+		m_y = block * 32 + sensorC[1];
 	}	
 
 }
