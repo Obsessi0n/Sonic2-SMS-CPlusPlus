@@ -114,6 +114,8 @@ void Sanic::Game::changePlayerRings(int *amount) {
 		int i = 1;
 		changePlayerLives(&i);
 	}
+	if (playerRings < 0)
+		playerRings = 0;
 }
 
 void Sanic::Game::changePlayerLives(int* amount) {

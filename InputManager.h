@@ -26,6 +26,7 @@ namespace Sanic {
 		Command* arrowRight_ = new MoveRightCommand;
 		Command* arrowDown_ = new RollingCommand;
 		Command* noArrow_ = new StopMovement;
+		Command* J_ = new TakeDamage;
 
 		static InputManager* instance;
 	};

@@ -34,4 +34,9 @@ namespace Sanic {
 	public:
 		virtual void execute() { Sanic::_Game::Instance()->getPlayer()->HorizontalMovementDir(0); };
 	};
+
+	class TakeDamage : public Command {
+	public:
+		virtual void execute() { Sanic::_Game::Instance()->getPlayer()->TakeDamage(true); };
+	};
 }

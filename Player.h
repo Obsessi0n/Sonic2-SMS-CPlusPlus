@@ -23,7 +23,7 @@ namespace Sanic {
 		float currentAcceleration = acceleration;
 		signed char direction;
 
-		void TakeDamage();
+		void TakeDamage(bool dir);
 		void Move() override;
 		void Jump();
 		void Physics() override;
@@ -48,6 +48,8 @@ namespace Sanic {
 		void Destroy() override;
 		SDL_Rect GetCollisionRect();
 
+		void DamageCooldownTimer();
+
 	private:
 		uint32_t cameraOffset = 30;
 		char lastDir = 1;
@@ -57,8 +59,17 @@ namespace Sanic {
 
 		PlayerAnimation* playerAnim;
 		void CheckSensors();
+		bool Immortal = false;
+		float damageCooldownTime=3;
+		float currentDamageCooldownTime = 0;
+		float damageForce = 0;
 
+		time_t Clock;
+		double startTime = 0;
+		double timeSinceStart = 0;
+		double immortalTimerSeconds = 0;
 
+		float DamageForce = 0;
 	};
 }
 #endif

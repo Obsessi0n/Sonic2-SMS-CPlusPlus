@@ -14,7 +14,7 @@ Sanic::Player::Player()
 
 	playerAnim = new PlayerAnimation;
 
-	entityCollisionBox = { (int)m_x, (int)m_y, 8, 32 };
+	entityCollisionBox = { (int)m_x+16, (int)m_y+16, 8, 32 };
 	CollisionBox = { (int)m_x, (int)m_y, 16, 32 };
 }
 
@@ -29,6 +29,14 @@ void Sanic::Player::HorizontalMovementDir(char _direction) {
 void Sanic::Player::Move() {
 	float newXPOS = m_x;
 
+	currentAcceleration += DamageForce;
+
+	if (DamageForce > 0) {
+		DamageForce -= 1;
+	}
+	else
+		DamageForce = 0;
+
 	//Player changed direction
 	if (direction != lastDir && currentAcceleration > 0) {
 		currentAcceleration -= decelaration;
@@ -37,8 +45,7 @@ void Sanic::Player::Move() {
 		{
 			currentAcceleration = 0;
 			isChangingDirection = false;
-		}
-			
+		}			
 	}
 	else if (direction == 0) { //If player is not pressing left or right
 		currentAcceleration -= friction;
@@ -67,6 +74,9 @@ void Sanic::Player::Move() {
 				lastDir = -1;
 		}
 	}
+
+	
+
 	CheckSensors();
 	
 	if (speed != 0) {
@@ -115,12 +125,15 @@ void Sanic::Player::Physics() {
 void Sanic::Player::Update()
 {
 	Physics();
+	DamageCooldownTimer();
 	Move();
 	playerAnim->UpdateState();
 	
 }
 
 void Sanic::Player::Render(int camX, int camY) {
+	if (Immortal && (SDL_GetTicks() % 6) < 3 ) //I Will need to think of a better way to do this
+		return;
 
 	playerAnim->Render(camX, camY);
 
@@ -229,4 +242,43 @@ void Sanic::Player::Destroy()
 void Sanic::Player::OnSlope(int* yPos) {
 
 		m_y = (float)*yPos - 32;
+}
+
+void Sanic::Player::TakeDamage(bool dir) {
+
+	if (!Immortal) {
+		currentDamageCooldownTime = damageCooldownTime;
+		startTime = time(&Clock);
+		immortalTimerSeconds = 3;
+		//Apply force!
+		currentAcceleration = 0;
+		if (dir)
+			DamageForce = 2;
+		else
+			DamageForce = -2;
+
+		jumpVelocity = 2;
+		isJumping = true;
+
+		//Lose rings
+		int all = -100;
+		Sanic::_Game::Instance()->changePlayerRings(&all);
+	}
+
+}
+
+void Sanic::Player::DamageCooldownTimer() {
+
+	if (timeSinceStart < immortalTimerSeconds) {
+		Immortal = true;
+		time(&Clock);  /* get current time; same as: timer = time(NULL)  */
+		timeSinceStart = difftime(Clock, startTime);
+		std::cout << timeSinceStart << " " << immortalTimerSeconds << "IMORTAL!";
+	}
+	else {
+		Immortal = false;
+		immortalTimerSeconds = 0;
+		timeSinceStart = 0;
+	}
+
 }
