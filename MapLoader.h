@@ -30,6 +30,10 @@ namespace Sanic {
 
 		int GetMapSizeY() { return mapLayoutData.size(); };
 		std::string GetBlockID(int const& xBlock, int const& yBlock);
+
+		int GetBlockYWithCoordinates(float y);
+		int GetBlockXWithCoordinates(float x);
+
 	private:
 
 		std::vector<std::vector<std::string>> mapLayoutData;

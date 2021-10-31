@@ -122,11 +122,70 @@ void Sanic::Player::Physics() {
 	m_y = m_y + gravityForce - jumpVelocity;
 }
 
+
+void Sanic::Player::PushBack() 
+{
+	//The right wall pushback is super incosistent and I don't know why!
+	// 
+	////Player inside Right Wall
+	if (Sanic::_PhysicsManager::Instance()->IsColliding(sensorB[0] + m_x, sensorB[1] + m_y - 2) ||
+		(Sanic::_PhysicsManager::Instance()->IsColliding(sensorF[0] + m_x, sensorF[1] + m_y))) {
+
+		//First we need to know what block we are inside!
+		int blockX = Sanic::_Game::Instance()->getMapLoader()->GetBlockXWithCoordinates((m_x + sensorB[0]));
+		//Now we need to place the player on the block on the right
+		m_x = (blockX-2) * 32 + 6;
+		currentAcceleration = 0;
+		std::cout << "Player was inside block and we pushed him out!" << '\n';
+	}
+
+	//Player inside Left Wall
+	else if (Sanic::_PhysicsManager::Instance()->IsColliding(sensorA[0] + m_x, sensorA[1] + m_y - 2) ||
+		(Sanic::_PhysicsManager::Instance()->IsColliding(sensorE[0] + m_x, sensorE[1] + m_y))) {
+		//First we need to know what block we are inside!
+		int blockX = Sanic::_Game::Instance()->getMapLoader()->GetBlockXWithCoordinates((m_x + sensorA[0]));
+		//Now we need to place the player on the block on the right
+		m_x = (blockX) * 32 - sensorA[0];
+		currentAcceleration = 0;
+		std::cout << "Player was inside block and we pushed him out!" << '\n';
+	}
+
+
+
+	//Player inside ground
+	if (Sanic::_PhysicsManager::Instance()->IsColliding(sensorB[0] + m_x-1, sensorB[1] + m_y - 2) ||
+			Sanic::_PhysicsManager::Instance()->IsColliding(sensorA[0] + m_x+1, sensorA[1] + m_y - 2)) {
+		//So first we need to know what block we are inside!
+		int blockY = Sanic::_Game::Instance()->getMapLoader()->GetBlockYWithCoordinates((m_y-2));
+		//Now we need to place the player on the block above
+		m_y = (blockY - 2) * 32 + sensorB[1];
+
+		std::cout << "Player was inside block and we pushed him out!"<<'\n';
+	}
+
+
+	if (isGrounded) // We don't need to check head if we are grounded
+		return;
+
+	//Player inside ceiling
+	if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x + sensorC[0] + 2, m_y + sensorC[1]) ||
+			 Sanic::_PhysicsManager::Instance()->IsColliding(m_x + sensorD[0]-2, m_y + sensorD[1])) {
+		//So first we need to know what block we are inside!
+		int blockY = Sanic::_Game::Instance()->getMapLoader()->GetBlockYWithCoordinates((m_y + sensorC[1]));
+		//Now we need to place the player on the block below
+		jumpVelocity = 0;
+		m_y = (blockY-1) * 32 + sensorB[1];
+
+		std::cout << "Player was inside block and we pushed him out!" << '\n';
+	}
+}
+
 void Sanic::Player::Update()
 {
 	Physics();
 	DamageCooldownTimer();
 	Move();
+	PushBack();
 	playerAnim->UpdateState();
 	
 }
@@ -172,65 +231,11 @@ void Sanic::Player::CheckSensors() {
 			//Goes here
 		}
 		else {
-			isGrounded = true;
-			//pushback if inside
-			if ((std::floor((m_y + 32) / 32)) > (std::floor((m_y + sensorA[1]) / 32)) && !isJumping) {
-				int floorBlock = std::floor((m_y + sensorA[1]) / 32);
-				int playerBlock = floorBlock - 1;
-				m_y = playerBlock*32 -1 ;
-				std::cout << "Inside";
-			}
-				
+			isGrounded = true;				
 		}
 	}
 	else
 		isGrounded = false;
-
-
-	//Wall collision
-	if (speed == 1) { //Moving right
-		if ((Sanic::_PhysicsManager::Instance()->IsColliding(sensorB[0] + m_x, sensorB[1] + m_y - 2) ||
-			(Sanic::_PhysicsManager::Instance()->IsColliding(sensorF[0] + m_x, sensorF[1] + m_y)) &&
-				!isJumping)) {
-			speed = 0;
-			currentAcceleration = 0;
-		}
-		else if ((Sanic::_PhysicsManager::Instance()->IsColliding(sensorF[0] + m_x, sensorF[1] + m_y)) ||
-			(Sanic::_PhysicsManager::Instance()->IsColliding(sensorD[0] + m_x, sensorD[1] + m_y + 1)) &&
-			isJumping) {
-			speed = 0;
-			currentAcceleration = 0;
-		}
-	}
-	else if (speed == -1) {//Moving Left
-		if ((Sanic::_PhysicsManager::Instance()->IsColliding(sensorA[0] + m_x, sensorA[1] + m_y - 2) ||
-			(Sanic::_PhysicsManager::Instance()->IsColliding(sensorE[0] + m_x, sensorE[1] + m_y)) &&
-			!isJumping)) {
-			speed = 0;
-			currentAcceleration = 0;
-		}
-		else if ((Sanic::_PhysicsManager::Instance()->IsColliding(sensorE[0] + m_x, sensorE[1] + m_y)) ||
-			(Sanic::_PhysicsManager::Instance()->IsColliding(sensorC[0] + m_x, sensorC[1] + m_y + 1)) &&
-			isJumping) {
-			speed = 0;
-			currentAcceleration = 0;
-
-		}
-	}
-
-
-	if (isGrounded)
-		return; // We don't need to check head if we are grounded!
-
-	//Head
-	if (Sanic::_PhysicsManager::Instance()->IsColliding(m_x + sensorC[0]+2, m_y + sensorC[1]) ||
-		 Sanic::_PhysicsManager::Instance()->IsColliding(m_x + sensorD[0]-2, m_y + sensorD[1])) {
-		jumpVelocity = 0;
-		//Pushback
-		int block = std::floor((m_y + sensorC[1]) / 32);
-		block++;
-		m_y = block * 32 + sensorC[1];
-	}	
 
 }
 

@@ -199,6 +199,15 @@ void Sanic::MapLoader::GetSlopeStartEnd(int* yStart, int* yEnd, int const& xBloc
 }
 
 
+int Sanic::MapLoader::GetBlockYWithCoordinates(float yLiteral) {
+    int blockY = std::ceil(yLiteral / 32);
+    return blockY;
+}
+int Sanic::MapLoader::GetBlockXWithCoordinates(float xLiteral) {
+    int blockX = std::ceil(xLiteral / 32);
+    return blockX;
+}
+
 std::string Sanic::MapLoader::GetBlockID(int const& xBlock, int const& yBlock) {
     //We swap x and y to be compatible with maplayoutdata
     return mapLayoutData[yBlock][xBlock];

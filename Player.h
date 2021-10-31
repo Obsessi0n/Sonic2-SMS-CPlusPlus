@@ -59,6 +59,7 @@ namespace Sanic {
 
 		PlayerAnimation* playerAnim;
 		void CheckSensors();
+		void PushBack();
 		bool Immortal = false;
 		float damageCooldownTime=3;
 		float currentDamageCooldownTime = 0;

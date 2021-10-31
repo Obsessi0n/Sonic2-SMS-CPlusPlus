@@ -35,6 +35,6 @@ namespace Sanic {
 
 		float fallingTimer = 0;
 		float jumpVelocity = 0;
-		float jumpForce = 3.5f;
+		const float jumpForce = 3.5f;
 	};
 }
