@@ -1,0 +1,49 @@
+name: build
+
+# Builds the game and runs its checks on Linux and on Windows, with the same compiler (GCC) and the same commands
+# as the README gives. Neither machine has a screen: the game is run with SDL's "dummy" video driver.
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # SDL is built from source together with the game. On Linux it needs the headers of the window systems.
+      - name: Install what SDL needs to build (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxi-dev libxfixes-dev libxss-dev libwayland-dev libxkbcommon-dev libegl1-mesa-dev libgl1-mesa-dev
+
+      - name: Configure
+        run: cmake -S . -B build -G Ninja -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+      # A picture of the game after 700 updates of running right, to look at: kept with the run for download.
+      - name: Take a screenshot
+        shell: bash
+        working-directory: build
+        env:
+          SDL_VIDEODRIVER: dummy
+        run: ./platformer --frames 700 --hold right --screenshot screenshot.bmp
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: screenshot-${{ matrix.os }}
+          path: build/screenshot.bmp

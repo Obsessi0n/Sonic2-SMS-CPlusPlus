@@ -1,0 +1,17 @@
+# The tiles a level is made of. Each line: the character that stands for the tile in a level file, the tile's
+# name (its picture is assets/tiles/<name>.png, 32 by 32), and what it is to the physics:
+#
+#   solid                the whole square is ground
+#   slope <left> <right> ground under a line: how many pixels down from the tile's top the surface is at the
+#                        left edge and at the right edge (0 is the top, 31 the bottom)
+#   decor                drawn, and walked through
+#
+# In a level file '.' is empty air, 'P' is where the player starts and 'o' is something to pick up.
+
+G grass     solid
+S soil      solid
+T stone     solid
+a rise_low  slope 31 16
+b rise_high slope 15 0
+c fall_high slope 0 15
+d fall_low  slope 16 31

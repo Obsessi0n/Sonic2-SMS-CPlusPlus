@@ -387,3 +387,6 @@ FodyWeavers.xsd
 .idea/
 *.sln.iml
 *.vcxproj
+
+# CMake build folder
+build/
