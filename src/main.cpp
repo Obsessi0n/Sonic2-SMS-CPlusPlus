@@ -6,9 +6,8 @@
 #include <string>
 #include <vector>
 
-//1 sec = 1000ms so 60fps is 1000/60 = 16.6666666667
-const double MS_PER_UPDATE = 16.6666666667;
-
+// The game runs 50 updates a second, as on a PAL console, unless it is started with "--hz 60", as on an NTSC one.
+//
 // A run with nobody at the keys, for checking the game from a script or on a machine with no screen:
 //
 //   --frames 300              runs that many updates as fast as they go, draws once, says where the player is, leaves
@@ -31,6 +30,8 @@ struct Script
 	int frames = 0;
 	std::vector<Hold> holds;
 	const char* screenshot = nullptr;
+	// Updates a second: 50 or 60.
+	int hz = 50;
 	bool understood = true;
 };
 
@@ -81,6 +82,15 @@ static Script readScript(int argc, char* args[])
 		{
 			script.screenshot = args[++i];
 		}
+		else if (std::strcmp(args[i], "--hz") == 0 && hasValue)
+		{
+			script.hz = std::atoi(args[++i]);
+			if (!Sanic::Game::isUpdateRate(script.hz))
+			{
+				std::cout << "--hz " << args[i] << ": expected 50 (PAL) or 60 (NTSC)" << '\n';
+				script.understood = false;
+			}
+		}
 		else if (std::strcmp(args[i], "--hold") == 0 && hasValue)
 		{
 			Hold hold;
@@ -93,7 +103,7 @@ static Script readScript(int argc, char* args[])
 		}
 		else
 		{
-			std::cout << "Unknown option " << args[i] << ". Options: --frames <updates>, --hold <keys>[:<updates>], --screenshot <file.bmp>" << '\n';
+			std::cout << "Unknown option " << args[i] << ". Options: --hz <50|60>, --frames <updates>, --hold <keys>[:<updates>], --screenshot <file.bmp>" << '\n';
 			script.understood = false;
 		}
 	}
@@ -121,6 +131,9 @@ int main(int argc, char* args[])
 	if (!script.understood)
 		return 2;
 
+	Sanic::_Game::Instance()->setUpdatesPerSecond(script.hz);
+	const double MS_PER_UPDATE = 1000.0 / script.hz;
+
 	if (Sanic::_Game::Instance()->init("Platformer", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SDL_WINDOW_SHOWN))
 	{
 		std::cout << "Game initialized" << '\n';
@@ -147,7 +160,7 @@ int main(int argc, char* args[])
 			Sanic::_Game::Instance()->render();
 
 		Sanic::Player* player = Sanic::_Game::Instance()->getPlayer();
-		std::cout << "After " << script.frames << " frames: player at " << player->getPosX() << "," << player->getPosY()
+		std::cout << "After " << script.frames << " frames at " << script.hz << " Hz (" << (int)Sanic::_Game::Instance()->getTimeSinceStart() << " s): player at " << player->getPosX() << "," << player->getPosY()
 			<< " level " << Sanic::_Game::Instance()->getLevelWidth() << "x" << Sanic::_Game::Instance()->getLevelHeight()
 			<< " camera " << Sanic::_Game::Instance()->camera.x << "," << Sanic::_Game::Instance()->camera.y
 			<< " picked up " << Sanic::_Game::Instance()->getPlayerRings() << '\n';

@@ -19,8 +19,9 @@ namespace Sanic {
 		PhysicsManager();
 		~PhysicsManager();
 
-		//The numbers that decide how the game feels, all of them here. The game runs 60 updates a second: a
-		//speed is in pixels per update, and what changes a speed is in pixels per update, every update.
+		//The numbers that decide how the game feels, all of them here. A speed is in pixels per update, and what
+		//changes a speed is in pixels per update, every update. They are the same at 50 updates a second and at
+		//60: at 50 the same movement takes a fifth longer on the clock, as it did on a PAL console.
 
 		//Running: what holding a direction adds to the speed along the ground, up to TOP_SPEED.
 		static constexpr float ACCELERATION = 0.1f;

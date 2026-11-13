@@ -2,7 +2,9 @@
 
 A 2D platformer engine in C++ and SDL2, written from scratch: a character that gains and keeps speed, ground with slopes, things to pick up, and a level format simple enough to edit in a text editor. Every line of code, every picture and every level here is the project's own.
 
-It is a learning project. The aim is an engine with the full feel of the fast platformers of the 8-bit and 16-bit consoles (speed that builds, slopes that matter, rolling, loops) and then a game of its own on top of it.
+It is a learning project. The aim is an engine with the full feel of the fast platformers of the 8-bit consoles (speed that builds, slopes that matter, rolling, loops) and then a game of its own on top of it.
+
+It keeps to what such a console was: a picture of 256 by 192 pixels, and 50 updates a second, as a PAL machine drew. Start it with `--hz 60` for the 60 of an NTSC machine. Everything in the game is counted in updates, so the two differ as the consoles did: at 50 the same game goes by a fifth more slowly.
 
 ## Building
 
@@ -36,11 +38,12 @@ platformer --frames 700 --hold right --screenshot shot.bmp
 platformer --frames 200 --hold right:60 --hold right+jump:20 --hold none
 ```
 
+- `--hz 50` or `--hz 60` sets how many updates there are to a second; 50 when it is left out. It works with nobody at the keys and with somebody.
 - `--frames N` runs N updates as fast as they go, draws once, says where the player ended up and leaves.
 - `--hold KEYS` holds keys during the run: `left`, `right`, `jump`, joined by `+`, or `none`. `--hold KEYS:N` holds them for N updates only; several `--hold` follow one another in the order given. A jump needs the key to go down: put a `--hold` without `jump` before one with it.
 - `--screenshot FILE.bmp` saves the frame drawn at the end, at the size of the window.
 
-It ends with a line such as `After 300 frames: player at 96,256 level 3072x384 camera 0,174 picked up 0`: where the player is, how big the level is, where the camera is, and how much he picked up, all in pixels. The clock and the animations count updates, not seconds, so the same run gives the same line and the same picture every time. Set the environment variable `SDL_VIDEODRIVER=dummy` to run with no screen.
+It ends with a line such as `After 300 frames at 50 Hz (6 s): player at 96,256 level 3072x384 camera 0,176 picked up 0`: how long that was on the game's clock, where the player is, how big the level is, where the camera is, and how much he picked up, the last four in pixels. The clock and the animations count updates, not seconds, so the same run gives the same line and the same picture every time. Set the environment variable `SDL_VIDEODRIVER=dummy` to run with no screen.
 
 ## Tests
 
@@ -51,13 +54,13 @@ ctest --test-dir build --output-on-failure
 runs two kinds of check:
 
 - `physics`, the program `physics_tests` built from `tests/physics_tests.cpp`. It starts the game's rules with no window, no pictures and no keyboard, on small levels written in the test itself, holds keys for a number of updates and checks positions and speeds: standing, falling, running up to top speed, friction, braking, the height of a jump against how long the key is held, walls, ceilings, slopes, ledges, pickups, the camera. What it expects is worked out from the constants, so tuning them does not break it unless it breaks what a test is about.
-- seven scripted runs of the program itself on `assets/levels/test.txt` (see `CMakeLists.txt`), each compared with the line it should end with. These do depend on the level and on the constants: when either changes, run them, look at what changed, and put the new numbers in.
+- ten scripted runs of the program itself on `assets/levels/test.txt` (see `CMakeLists.txt`), each compared with the line it should end with. These do depend on the level and on the constants: when either changes, run them, look at what changed, and put the new numbers in.
 
 `.github/workflows/build.yml` builds the game and runs all of this on Linux and on Windows at every push, and keeps a screenshot of the run.
 
 ## How the player moves
 
-The game runs 60 updates a second. Everything about the movement is a number in `src/PhysicsManager.h`, in pixels per update: change one, build, and feel the difference.
+Everything about the movement is a number in `src/PhysicsManager.h`, in pixels per update: change one, build, and feel the difference. The numbers are the same at 50 updates a second and at 60.
 
 - **On the ground** the player has one speed, along the ground, whatever way the ground leans. Holding a direction adds `ACCELERATION` to it up to `TOP_SPEED`; holding the other direction takes `DECELERATION` off (he skids); holding nothing takes `FRICTION` off until he stops.
 - **Slopes** pull downhill by `SLOPE_FACTOR` times the sine of their angle, at every update. Going up he is slower; going down he gains speed past his top speed, and keeps it for as long as the direction is held. A gentle slope pulls less than the friction, so he can stand on it; a slope of 45 degrees pulls more, and he slides down it.
@@ -93,7 +96,7 @@ python tools/make_art.py
 ## Where things are
 
 ```text
-src/main.cpp            the loop: a fixed 60 updates a second, drawing as often as it can; and the scripted runs
+src/main.cpp            the loop: a fixed 50 or 60 updates a second, drawing as often as it can; and the scripted runs
 src/Game.*              what there is in the game and the order it is updated and drawn in
 src/Player.*            the player: his speeds, his sensors, what a hit does
 src/PhysicsManager.*    the constants of the movement, and what the level is at a point: solid or not, and where the floor is

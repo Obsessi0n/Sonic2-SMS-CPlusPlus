@@ -61,12 +61,24 @@ namespace Sanic {
 		void changePlayerRings(int *amount);
 		void changePlayerLives(int* amount);
 
-		// The game's own clock. It counts updates, 60 to the second, not the time on the wall: the same run
-		// shows the same thing however fast the machine went through it.
+		// The game's own clock. It counts updates, not the time on the wall: the same run shows the same thing
+		// however fast the machine went through it.
 		int getUpdates() const { return updates; };
 		double getTimeSinceStart() { return timeSinceStart; };
 		// The same in milliseconds, for what is animated.
-		Uint32 getTicks() const { return (Uint32)(updates * 1000.0 / UPDATES_PER_SECOND); };
+		Uint32 getTicks() const { return (Uint32)(updates * 1000.0 / updatesPerSecond); };
+
+		// How many updates there are to a second: 50, as a PAL console draws its picture, or 60, as an NTSC one does.
+		// Everything in the game is counted in updates, so at 50 the same game simply goes by more slowly, as it did
+		// on the two consoles. Anything else asked for is refused. Set before init.
+		static bool isUpdateRate(int rate) { return rate == 50 || rate == 60; };
+		bool setUpdatesPerSecond(int rate) {
+			if (!isUpdateRate(rate))
+				return false;
+			updatesPerSecond = rate;
+			return true;
+		};
+		int getUpdatesPerSecond() const { return updatesPerSecond; };
 
 	private:
 		static Game* instance;
@@ -82,12 +94,13 @@ namespace Sanic {
 		UserInterface* userInterface = nullptr;
 		EntityManager* entityManager = nullptr;
 
+		// The picture is the size an 8-bit console of the time drew, 256 by 192, in a window four times that.
 		const int SCREEN_WIDTH = 256 * 4;
-		const int SCREEN_HEIGHT = 196 * 4;
+		const int SCREEN_HEIGHT = 192 * 4;
 		const int RES_WIDTH = 256;
-		const int RES_HEIGHT = 196;
+		const int RES_HEIGHT = 192;
 		const int TileSize = 32;
-		const int UPDATES_PER_SECOND = 60;
+		int updatesPerSecond = 50;
 
 		// The size of the level in pixels: read off the level when it is loaded.
 		int level_width = 0;

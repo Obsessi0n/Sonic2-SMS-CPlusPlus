@@ -151,7 +151,7 @@ bool Sanic::Game::screenshot(const char* fileName)
 	draw();
 
 	// The frame is read back before it is shown: once shown, what the renderer still holds is not defined.
-	// It comes out at the size of the window, not at the game's own 256 by 196.
+	// It comes out at the size of the window, not at the game's own 256 by 192.
 	int width = 0, height = 0;
 	SDL_GetRendererOutputSize(renderer, &width, &height);
 	SDL_Surface* shot = SDL_CreateRGBSurfaceWithFormat(0, width, height, 24, SDL_PIXELFORMAT_BGR24);
@@ -216,5 +216,5 @@ void Sanic::Game::changePlayerLives(int* amount) {
 void Sanic::Game::GameTimer() {
 	updates++;
 
-	timeSinceStart = (double)updates / UPDATES_PER_SECOND;
+	timeSinceStart = (double)updates / updatesPerSecond;
 }

@@ -90,9 +90,18 @@ function(scripted_run name expected)
     TIMEOUT 60)
 endfunction()
 
-# Left alone, the player stays standing where the level puts him: on the ground, at tile (3,8).
-scripted_run(stands_on_the_ground "player at 96,256 level 3072x384 camera 0,174 picked up 0"
+# Left alone, the player stays standing where the level puts him: on the ground, at tile (3,8). The picture is 192
+# pixels tall, so the camera, centred on him, is 176 down the level. 300 updates at 50 a second are 6 seconds.
+scripted_run(stands_on_the_ground "at 50 Hz \\(6 s\\): player at 96,256 level 3072x384 camera 0,176 picked up 0"
   --frames 300)
+# At 60 updates a second the same updates are the same game; only the clock has moved less.
+scripted_run(the_same_game_at_60 "at 60 Hz \\(5 s\\): player at 96,256 level 3072x384 camera 0,176 picked up 0"
+  --hz 60 --frames 300)
+scripted_run(runs_the_same_way_at_60 "at 60 Hz .*player at 2664,256 .* picked up 18"
+  --hz 60 --frames 1600 --hold right)
+# Any other rate is refused before the game starts.
+scripted_run(refuses_another_rate "expected 50 \\(PAL\\) or 60 \\(NTSC\\)"
+  --hz 55 --frames 10)
 # A jump with the key held: 55 updates after it starts he is past its top (109 pixels up) and some 60 pixels above
 # the ground, on the way down; later he is back on it.
 scripted_run(jumps "player at 96,19[0-9] "
