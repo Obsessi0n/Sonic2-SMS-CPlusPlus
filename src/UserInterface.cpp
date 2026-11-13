@@ -1,13 +1,11 @@
 #include "UserInterface.h"
 #include "TextureManager.h"
 #include "Game.h"
-#include <chrono>
 #include <cmath>
 
 Sanic::UserInterface::UserInterface()
 {
-	Sanic::_TextureManager::Instance()->Load("assets/sprites/ui.png", "interface", Sanic::_Game::Instance()->getRenderer());
-	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+	Sanic::_TextureManager::Instance()->Load("assets/sprites/ui.bmp", "interface", Sanic::_Game::Instance()->getRenderer());
 }
 
 void Sanic::UserInterface::TopUI()

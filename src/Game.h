@@ -8,8 +8,7 @@
 #include "EntityManager.h"
 
 #include <SDL.h>
-#include <iostream>
-#include <istream>
+#include <string>
 
 namespace Sanic {
 	class Game
@@ -25,10 +24,12 @@ namespace Sanic {
 			return instance;
 		}
 
-		bool init(const char* title, int x, int y, int flags);
+		// The window is the picture made bigger by a whole number, scale, so that every pixel of the game is a
+		// square of the screen's; 0 picks the biggest that fits on the screen, up to 4.
+		bool init(const char* title, int x, int y, int flags, int scale = 0);
 		// The game with no window, no pictures and no keyboard: only its rules, on a level given as text (what
 		// each character is, then the grid). The tests of the physics start it this way; nothing is ever drawn.
-		bool initWithoutWindow(std::istream& tilestxt, std::istream& leveltxt);
+		bool initWithoutWindow(const std::string& tilesText, const std::string& levelText);
 
 		void render();
 		// Draws one frame and saves it as a BMP picture: what "--screenshot" on the command line asks for.
@@ -46,8 +47,11 @@ namespace Sanic {
 		Player* getPlayer() { return player; };
 		MapLoader* getMapLoader() { return mapLoader; };
 
-		int getScreenWidth() const { return SCREEN_WIDTH; };
-		int getScreenHeight() const { return SCREEN_HEIGHT; };
+		int getScreenWidth() const { return RES_WIDTH * scale; };
+		int getScreenHeight() const { return RES_HEIGHT * scale; };
+		// The biggest scale that fits on the screen the game opens on, from 1 to MAX_FIT_SCALE.
+		static int fittingScale();
+		static constexpr int MAX_FIT_SCALE = 4;
 		int getTileSize() const { return TileSize; };
 		int getResWidth() const { return RES_WIDTH; };
 		int getResHeight() const { return RES_HEIGHT; };
@@ -64,9 +68,14 @@ namespace Sanic {
 		// The game's own clock. It counts updates, not the time on the wall: the same run shows the same thing
 		// however fast the machine went through it.
 		int getUpdates() const { return updates; };
+		// The seconds the clock of the level shows. One of them is 60 updates at either rate, so at 50 updates a
+		// second the clock runs slow against a watch, as everything else does.
 		double getTimeSinceStart() { return timeSinceStart; };
-		// The same in milliseconds, for what is animated.
-		Uint32 getTicks() const { return (Uint32)(updates * 1000.0 / updatesPerSecond); };
+		// The same in milliseconds, for what is animated: an animation moves on with the updates too.
+		Uint32 getTicks() const { return (Uint32)(updates * 1000.0 / PhysicsManager::CLOCK_UPDATES_PER_SECOND); };
+
+		// The line the camera keeps the player's feet near, in pixels from the top of the picture.
+		int getCameraLine() const { return cameraLine; };
 
 		// How many updates there are to a second: 50, as a PAL console draws its picture, or 60, as an NTSC one does.
 		// Everything in the game is counted in updates, so at 50 the same game simply goes by more slowly, as it did
@@ -94,11 +103,11 @@ namespace Sanic {
 		UserInterface* userInterface = nullptr;
 		EntityManager* entityManager = nullptr;
 
-		// The picture is the size an 8-bit console of the time drew, 256 by 192, in a window four times that.
-		const int SCREEN_WIDTH = 256 * 4;
-		const int SCREEN_HEIGHT = 192 * 4;
-		const int RES_WIDTH = 256;
-		const int RES_HEIGHT = 192;
+		// The picture is the size an 8-bit console of the time drew, 256 by 192, in a window a whole number of
+		// times that (see init).
+		static constexpr int RES_WIDTH = 256;
+		static constexpr int RES_HEIGHT = 192;
+		int scale = MAX_FIT_SCALE;
 		const int TileSize = 32;
 		int updatesPerSecond = 50;
 
@@ -112,6 +121,9 @@ namespace Sanic {
 		int playerLives = 3;
 
 		void GameTimer();
+		// The camera follows the player: see Game.cpp.
+		void moveCamera();
+		int cameraLine = PhysicsManager::CAMERA_LINE_START;
 		// Everything a frame shows, drawn but not yet put on the screen.
 		void draw();
 		// What is in a level once its map is loaded, put at its start; and all of it taken away again.

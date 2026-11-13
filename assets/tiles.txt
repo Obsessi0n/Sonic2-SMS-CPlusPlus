@@ -1,17 +1,38 @@
 # The tiles a level is made of. Each line: the character that stands for the tile in a level file, the tile's
 # name (its picture is assets/tiles/<name>.png, 32 by 32), and what it is to the physics:
 #
-#   solid                the whole square is ground
-#   slope <left> <right> ground under a line: how many pixels down from the tile's top the surface is at the
-#                        left edge and at the right edge (0 is the top, 31 the bottom)
-#   decor                drawn, and walked through
+#   solid                        the whole square is ground: a floor on top, a wall at the sides, a ceiling below
+#   slope <left> <right> <class> ground under a line: how many pixels down from the tile's top the surface is at
+#                                the left edge and at the right edge (0 is the top, 31 the bottom), and how steep
+#                                the slope it belongs to is: 1:1 (one up for one along, 45 degrees), 1:2 or 1:4.
+#                                The class decides how hard the slope pushes downhill. It can be left out, and is
+#                                then worked out from the two numbers.
+#   oneway                       a platform: a floor to land on from above, nothing from below or from the side
+#   decor                        drawn, and walked through
 #
 # In a level file '.' is empty air, 'P' is where the player starts and 'o' is something to pick up.
 
-G grass     solid
-S soil      solid
-T stone     solid
-a rise_low  slope 31 16
-b rise_high slope 15 0
-c fall_high slope 0 15
-d fall_low  slope 16 31
+G grass      solid
+S soil       solid
+T stone      solid
+= plank      oneway
+
+# One up for two along: two tiles to climb one.
+a rise_low   slope 31 16 1:2
+b rise_high  slope 15 0  1:2
+c fall_high  slope 0 15  1:2
+d fall_low   slope 16 31 1:2
+
+# One up for one along: a tile climbs one.
+r rise_steep slope 31 0  1:1
+f fall_steep slope 0 31  1:1
+
+# One up for four along: four tiles to climb one.
+1 rise_q1    slope 31 24 1:4
+2 rise_q2    slope 23 16 1:4
+3 rise_q3    slope 15 8  1:4
+4 rise_q4    slope 7 0   1:4
+5 fall_q1    slope 0 7   1:4
+6 fall_q2    slope 8 15  1:4
+7 fall_q3    slope 16 23 1:4
+8 fall_q4    slope 24 31 1:4

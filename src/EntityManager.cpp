@@ -11,7 +11,7 @@ Sanic::EntityManager::~EntityManager()
 void Sanic::EntityManager::LoadPickups(const std::vector<SDL_Point>& places)
 {
 	// The picture is loaded once, whatever the number of things that wear it.
-	Sanic::_TextureManager::Instance()->Load("assets/sprites/pickup.png", "ring", Sanic::_Game::Instance()->getRenderer());
+	Sanic::_TextureManager::Instance()->Load("assets/sprites/pickup.bmp", "ring", Sanic::_Game::Instance()->getRenderer());
 
 	for (const SDL_Point& place : places)
 	{

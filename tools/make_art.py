@@ -5,18 +5,67 @@
 It writes the tiles, the player's sheet, what is picked up and the numbers of the display under assets/.
 Change a colour or a shape here and run it again; or draw better pictures by hand over its output, keeping
 each picture's size and the place of each frame in it.
+
+The pictures are BMP of 16 colours, four bits to a pixel, as the consoles of the time kept theirs: SDL reads
+BMP by itself, so the game needs no library for pictures. Colour 0 of each picture's palette is see-through.
 """
 
+import struct
 from pathlib import Path
 
 from PIL import Image, ImageDraw
 
 ASSETS = Path(__file__).resolve().parent.parent / "assets"
 CLEAR = (0, 0, 0, 0)
+# Colour 0 of every palette: never drawn, it stands for the pixels that are not there.
+SEE_THROUGH = (255, 0, 255)
+
+
+def save_bmp(image, path):
+    """Writes a picture as a BMP of 16 colours: 4 bits to a pixel, colour 0 for what is see-through."""
+    image = image.convert("RGBA")
+    width, height = image.size
+    pixels = image.load()
+    palette = [SEE_THROUGH]
+    index = {}
+    rows = []
+    for y in range(height):
+        row = []
+        for x in range(width):
+            r, g, b, a = pixels[x, y]
+            if a == 0:
+                row.append(0)
+                continue
+            if a != 255:
+                raise ValueError(f"{path.name}: the pixel at {x},{y} is partly see-through; here a pixel is there or not")
+            if (r, g, b) not in index:
+                if (r, g, b) == SEE_THROUGH or len(palette) == 16:
+                    raise ValueError(f"{path.name}: more than 15 colours, or the colour kept for see-through")
+                index[(r, g, b)] = len(palette)
+                palette.append((r, g, b))
+            row.append(index[(r, g, b)])
+        rows.append(row)
+
+    # Each row of a BMP takes a whole number of 4 bytes, and the rows are kept from the bottom up.
+    stride = (width * 4 + 31) // 32 * 4
+    data = bytearray()
+    for row in reversed(rows):
+        line = bytearray(stride)
+        for x, value in enumerate(row):
+            line[x // 2] |= value << 4 if x % 2 == 0 else value
+        data += line
+    palette += [(0, 0, 0)] * (16 - len(palette))
+
+    offset = 14 + 40 + 16 * 4
+    header = struct.pack("<2sIHHI", b"BM", offset + len(data), 0, 0, offset)
+    info = struct.pack("<IiiHHIIiiII", 40, width, height, 1, 4, 0, len(data), 2835, 2835, 16, 0)
+    colours = b"".join(struct.pack("<4B", b, g, r, 0) for r, g, b in palette)
+    path.write_bytes(header + info + colours + bytes(data))
 
 GRASS, GRASS_DARK = (88, 176, 72), (52, 128, 56)
 SOIL, SOIL_DARK, SOIL_LIGHT = (140, 92, 58), (104, 66, 42), (166, 116, 78)
 STONE, STONE_DARK, STONE_LIGHT = (124, 132, 146), (88, 94, 108), (160, 168, 182)
+WOOD, WOOD_DARK, WOOD_LIGHT = (176, 124, 72), (124, 82, 44), (208, 160, 104)
 
 SUIT, SUIT_DARK = (240, 138, 36), (188, 98, 20)
 VISOR, GLINT = (38, 48, 66), (150, 220, 255)
@@ -67,6 +116,22 @@ def stone_tile():
         draw.line((0, y + 15, 31, y + 15), STONE_DARK)
     for x, y in ((15, 0), (7, 16), (23, 16)):
         draw.line((x, y, x, y + 15), STONE_DARK)
+    return image
+
+
+def plank_tile():
+    """A wooden platform: a plank along the top of the square on two short brackets, and air under it.
+
+    It is the picture of the one-way tile: the player jumps up through it and lands on it.
+    """
+    image, draw = sheet(32, 32)
+    draw.rectangle((0, 0, 31, 5), WOOD)
+    draw.line((0, 0, 31, 0), WOOD_LIGHT)
+    draw.line((0, 5, 31, 5), WOOD_DARK)
+    for x in (10, 21):
+        draw.line((x, 1, x, 4), WOOD_DARK)
+    for x in (3, 26):
+        draw.rectangle((x, 6, x + 2, 9), WOOD_DARK)
     return image
 
 
@@ -223,14 +288,27 @@ def main():
         "rise_high": slope_tile(15, 0),
         "fall_high": slope_tile(0, 15),
         "fall_low": slope_tile(16, 31),
+        # A steep one climbs a tile in one tile.
+        "rise_steep": slope_tile(31, 0),
+        "fall_steep": slope_tile(0, 31),
+        # A shallow one takes four tiles to climb one: four quarters up, four down.
+        "rise_q1": slope_tile(31, 24),
+        "rise_q2": slope_tile(23, 16),
+        "rise_q3": slope_tile(15, 8),
+        "rise_q4": slope_tile(7, 0),
+        "fall_q1": slope_tile(0, 7),
+        "fall_q2": slope_tile(8, 15),
+        "fall_q3": slope_tile(16, 23),
+        "fall_q4": slope_tile(24, 31),
+        "plank": plank_tile(),
     }
     (ASSETS / "tiles").mkdir(parents=True, exist_ok=True)
     (ASSETS / "sprites").mkdir(parents=True, exist_ok=True)
     for name, image in tiles.items():
-        image.save(ASSETS / "tiles" / f"{name}.png")
-    player_sheet().save(ASSETS / "sprites" / "player.png")
-    pickup_sheet().save(ASSETS / "sprites" / "pickup.png")
-    ui_sheet().save(ASSETS / "sprites" / "ui.png")
+        save_bmp(image, ASSETS / "tiles" / f"{name}.bmp")
+    save_bmp(player_sheet(), ASSETS / "sprites" / "player.bmp")
+    save_bmp(pickup_sheet(), ASSETS / "sprites" / "pickup.bmp")
+    save_bmp(ui_sheet(), ASSETS / "sprites" / "ui.bmp")
     print(f"{len(tiles)} tiles and 3 sheets written under {ASSETS}")
 
 

@@ -1,10 +1,10 @@
 #include "TextureManager.h"
 #include "Game.h"
-#include <iostream>
+#include <cstdio>
 
 Sanic::TextureManager* Sanic::TextureManager::instance = 0;
 
-bool Sanic::TextureManager::Load(std::string fileName, std::string id, SDL_Renderer* renderer)
+bool Sanic::TextureManager::Load(const std::string& fileName, const std::string& id, SDL_Renderer* renderer)
 {
 	// With no renderer there is nothing to draw with, and so no use for pictures: the game is running without a
 	// window, for a test of its rules.
@@ -15,13 +15,17 @@ bool Sanic::TextureManager::Load(std::string fileName, std::string id, SDL_Rende
 	if (spritesheet.find(id) != spritesheet.end())
 		return true;
 
-	SDL_Surface* tempSurface = IMG_Load(fileName.c_str());
+	SDL_Surface* tempSurface = SDL_LoadBMP(fileName.c_str());
 
 	if (tempSurface == nullptr)
 	{
-		std::cerr << "Image with name " << fileName.c_str() << " could not be loaded! " << IMG_GetError() << '\n';
+		std::fprintf(stderr, "Image with name %s could not be loaded! %s\n", fileName.c_str(), SDL_GetError());
 		return false;
 	}
+
+	// Colour 0 of the palette is see-through. The texture made below takes it as transparent pixels.
+	if (tempSurface->format->palette != nullptr)
+		SDL_SetColorKey(tempSurface, SDL_TRUE, 0);
 
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, tempSurface);
 
@@ -29,7 +33,7 @@ bool Sanic::TextureManager::Load(std::string fileName, std::string id, SDL_Rende
 
 	if (texture == nullptr)
 	{
-		std::cerr << "Could not create texture from surface with name " << fileName.c_str() << '\n';
+		std::fprintf(stderr, "Could not create texture from surface with name %s\n", fileName.c_str());
 		return false;
 	}
 
@@ -38,7 +42,7 @@ bool Sanic::TextureManager::Load(std::string fileName, std::string id, SDL_Rende
 	return true;
 }
 
-void Sanic::TextureManager::Draw(std::string id, int x, int y, int w, int h, double scale, SDL_Renderer* renderer, SDL_RendererFlip flip)
+void Sanic::TextureManager::Draw(const std::string& id, int x, int y, int w, int h, double scale, SDL_Renderer* renderer, SDL_RendererFlip flip)
 {
 	auto found = spritesheet.find(id);
 	if (found == spritesheet.end())
@@ -59,7 +63,7 @@ void Sanic::TextureManager::Draw(std::string id, int x, int y, int w, int h, dou
 	SDL_RenderCopyEx(renderer, found->second, &srcRect, &destRect, 0, nullptr, flip);
 }
 
-void Sanic::TextureManager::DrawFrame(std::string id, int x, int y, int w, int h, double scale, int currentRow, int currentFrame, SDL_Renderer* renderer, SDL_RendererFlip flip)
+void Sanic::TextureManager::DrawFrame(const std::string& id, int x, int y, int w, int h, double scale, int currentRow, int currentFrame, SDL_Renderer* renderer, SDL_RendererFlip flip)
 {
 	auto found = spritesheet.find(id);
 	if (found == spritesheet.end())
@@ -77,7 +81,7 @@ void Sanic::TextureManager::DrawFrame(std::string id, int x, int y, int w, int h
 	SDL_RenderCopyEx(renderer, found->second, &srcRect, &destRect, 0, nullptr, flip);
 }
 
-void Sanic::TextureManager::DrawAnimation(std::string id, int x, int y, int w, int h, double scale, int currentRow, int frameAmount, int speed, SDL_Renderer* renderer, SDL_RendererFlip flip)
+void Sanic::TextureManager::DrawAnimation(const std::string& id, int x, int y, int w, int h, double scale, int currentRow, int frameAmount, int speed, SDL_Renderer* renderer, SDL_RendererFlip flip)
 {
 	// The game's own clock, not the one on the wall: an animation moves on with the updates, and a frame drawn
 	// after the same number of updates is always the same frame.
@@ -92,7 +96,7 @@ void Sanic::TextureManager::DrawAnimation(std::string id, int x, int y, int w, i
 	DrawFrame(id, x, y, w, h, scale, currentRow, (int)currentFrame, renderer, flip);
 }
 
-void Sanic::TextureManager::ClearFromSpritesheet(std::string id)
+void Sanic::TextureManager::ClearFromSpritesheet(const std::string& id)
 {
 	auto found = spritesheet.find(id);
 	if (found == spritesheet.end())

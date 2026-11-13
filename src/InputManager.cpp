@@ -18,11 +18,13 @@ void Sanic::InputManager::HandleInput()
 	//A key counts as pressed when it is down on the keyboard or held by a script.
 	Press(currentKeyStates[SDL_SCANCODE_LEFT] || heldLeft,
 		currentKeyStates[SDL_SCANCODE_RIGHT] || heldRight,
+		currentKeyStates[SDL_SCANCODE_UP] || heldUp,
+		currentKeyStates[SDL_SCANCODE_DOWN] || heldDown,
 		currentKeyStates[SDL_SCANCODE_Z] || heldJump,
 		currentKeyStates[SDL_SCANCODE_J]);
 }
 
-void Sanic::InputManager::Press(bool left, bool right, bool jump, bool hurt)
+void Sanic::InputManager::Press(bool left, bool right, bool up, bool down, bool jump, bool hurt)
 {
 	if (jump) {
 		Z_->execute();
@@ -31,28 +33,44 @@ void Sanic::InputManager::Press(bool left, bool right, bool jump, bool hurt)
 		noZ_->execute();
 	}
 
-	if (left) {
-		arrowLeft_->execute();
+	if (up) {
+		arrowUp_->execute();
+	}
+	else {
+		noUp_->execute();
 	}
 
+	if (down) {
+		arrowDown_->execute();
+	}
+	else {
+		noDown_->execute();
+	}
+
+	//Right before left: with both held it is left that counts
 	if (right) {
 		arrowRight_->execute();
 	}
-	if (hurt) {
-		J_->execute();
+
+	if (left) {
+		arrowLeft_->execute();
 	}
-
-
 
 	if (!left && !right) {
 		noArrow_->execute();
 	}
 
+	if (hurt) {
+		J_->execute();
+	}
+
 }
 
-void Sanic::InputManager::HoldKeys(bool left, bool right, bool jump)
+void Sanic::InputManager::HoldKeys(bool left, bool right, bool up, bool down, bool jump)
 {
 	heldLeft = left;
 	heldRight = right;
+	heldUp = up;
+	heldDown = down;
 	heldJump = jump;
 }

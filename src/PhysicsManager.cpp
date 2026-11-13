@@ -1,6 +1,4 @@
 #include "PhysicsManager.h"
-#include <cmath>
-#include <iostream>
 #include "Game.h"
 
 
@@ -14,49 +12,66 @@ Sanic::PhysicsManager::~PhysicsManager() {
 
 }
 
-bool Sanic::PhysicsManager::IsSolid(float const& xLiteralPosition, float const& yLiteralPosition) {
+bool Sanic::PhysicsManager::IsSolid(int const& xPixel, int const& yPixel) {
 	int tileSize = Sanic::_Game::Instance()->getTileSize();
+	MapLoader* map = Sanic::_Game::Instance()->getMapLoader();
 
-	//We convert the literal position into the pixel it is in, and the pixel into tile number
-	int xPixel = (int)std::floor(xLiteralPosition);
-	int yPixel = (int)std::floor(yLiteralPosition);
-	int xBlock = (int)std::floor(xLiteralPosition / tileSize);
-	int yBlock = (int)std::floor(yLiteralPosition / tileSize);
+	//We convert the pixel into tile number
+	int xBlock = ToBlock(xPixel);
+	int yBlock = ToBlock(yPixel);
 
-	//How high the ground stands in this column of the tile: the point is in it when it is no higher than that
-	int height = Sanic::_Game::Instance()->getMapLoader()->GetGroundHeight(xBlock, yBlock, xPixel - xBlock * tileSize);
+	//A platform that is only a floor from above is no wall and no ceiling
+	if (!map->IsSolidBlock(xBlock, yBlock))
+		return false;
+
+	//How high the ground stands in this column of the tile: the pixel is in it when it is no higher than that
+	int height = map->GetGroundHeight(xBlock, yBlock, xPixel - xBlock * tileSize);
 
 	return yPixel - yBlock * tileSize >= tileSize - height;
 }
 
-bool Sanic::PhysicsManager::FindFloor(float const& xLiteralPosition, float const& yLiteralPosition, int* surfaceY, float* angle) {
+Sanic::PhysicsManager::FloorCheck Sanic::PhysicsManager::CheckFloor(int const& xPixel, int const& yPixel, int const& ySpeed, int* surfaceY, int* slopePush) {
 	int tileSize = Sanic::_Game::Instance()->getTileSize();
 	MapLoader* map = Sanic::_Game::Instance()->getMapLoader();
 
-	int xPixel = (int)std::floor(xLiteralPosition);
-	int xBlock = (int)std::floor(xLiteralPosition / tileSize);
-	int yBlock = (int)std::floor(yLiteralPosition / tileSize);
+	int xBlock = ToBlock(xPixel);
+	int yBlock = ToBlock(yPixel);
 	int column = xPixel - xBlock * tileSize;
 
-	int height = map->GetGroundHeight(xBlock, yBlock, column);
+	if (map->IsSolidBlock(xBlock, yBlock)) {
+		int height = map->GetGroundHeight(xBlock, yBlock, column);
+		int push = map->GetSlopePush(xBlock, yBlock);
 
-	if (height == tileSize) {
 		//This column is ground to the top of its tile: the surface may be further up, in the tile above
-		int heightAbove = map->GetGroundHeight(xBlock, yBlock - 1, column);
-		if (heightAbove > 0) {
-			yBlock = yBlock - 1;
-			height = heightAbove;
+		if (height == tileSize && map->IsSolidBlock(xBlock, yBlock - 1)) {
+			int heightAbove = map->GetGroundHeight(xBlock, yBlock - 1, column);
+			if (heightAbove > 0) {
+				height += heightAbove;
+				push = map->GetSlopePush(xBlock, yBlock - 1);
+			}
 		}
-	}
-	else if (height == 0) {
-		//Nothing in this column of the tile: the ground may be just under it, in the tile below
-		height = map->GetGroundHeight(xBlock, yBlock + 1, column);
-		if (height == 0)
-			return false;
-		yBlock = yBlock + 1;
+
+		int surface = (yBlock + 1) * tileSize - height;
+		//Above the surface there is nothing to stand on yet. At it or under it, however deep and whichever
+		//way the point was moving, the surface is where it belongs.
+		if (yPixel < surface)
+			return ABOVE_GROUND;
+
+		*surfaceY = surface;
+		*slopePush = push;
+		return ON_GROUND;
 	}
 
-	*surfaceY = yBlock * tileSize + tileSize - height;
-	*angle = map->GetGroundAngle(xBlock, yBlock);
-	return true;
+	if (map->IsOneWayBlock(xBlock, yBlock)) {
+		int surface = (yBlock + 1) * tileSize - map->GetGroundHeight(xBlock, yBlock, column);
+		//A platform catches only what comes down on to it, and only if it is not already too far through
+		if (ySpeed > 0 && yPixel >= surface && yPixel - surface < ToPixel(ySpeed) + ONE_WAY_REACH) {
+			*surfaceY = surface;
+			*slopePush = 0;
+			return ON_GROUND;
+		}
+		return ABOVE_GROUND;
+	}
+
+	return NO_GROUND;
 }

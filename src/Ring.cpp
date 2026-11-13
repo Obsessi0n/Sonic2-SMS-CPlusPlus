@@ -25,6 +25,10 @@ void Sanic::Ring::Render(int camX, int camY)
 }
 
 void Sanic::Ring::CheckCollision() {
+	// While the player is thrown back by a hit, nothing touches him.
+	if (Sanic::_Game::Instance()->getPlayer()->getState() == PlayerState::Hurt)
+		return;
+
 	// Both boxes are in the level's own coordinates, wherever the camera is.
 	entityCollisionBox = { (int)m_x, (int)m_y, m_width, m_height };
 	if (Sanic::_CollisionManager::Instance()->CheckCollision(entityCollisionBox, Sanic::_Game::Instance()->getPlayer()->GetCollisionRect()))

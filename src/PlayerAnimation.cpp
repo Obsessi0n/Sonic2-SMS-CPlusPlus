@@ -1,67 +1,44 @@
 #include "PlayerAnimation.h"
 #include "TextureManager.h"
 #include "Game.h"
-#include <cmath>
 
 void Sanic::PlayerAnimation::UpdateState()
 {
-	if (std::abs(Sanic::_Game::Instance()->getPlayer()->GetSpeed()) > 0.01f)
-	{
-		state = PlayerState::Running;
-	}
-	else
-	{
-		state = PlayerState::Idle;
-	}
-
-	if (Sanic::_Game::Instance()->getPlayer()->IsJumping())
-	{
-		state = PlayerState::Jumping;
-	}
-
-	else if (Sanic::_Game::Instance()->getPlayer()->IsChangingDirection())
-	{
-		state = PlayerState::Skidding;
-	}
+	//The picture follows what the player is doing
+	state = Sanic::_Game::Instance()->getPlayer()->getState();
 }
 
 void Sanic::PlayerAnimation::Render(int camX, int camY)
 
 {
-	if (state == PlayerState::Idle)
+	Player* player = Sanic::_Game::Instance()->getPlayer();
+	SDL_Renderer* renderer = Sanic::_Game::Instance()->getRenderer();
+	int x = player->getPosX() - camX;
+	int y = player->getPosY() - camY;
+	int w = player->getWidth();
+	int h = player->getHeight();
+	//The pictures look to the right: looking left they are drawn mirrored
+	SDL_RendererFlip flip = player->GetFacing() == -1 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+
+	if (state == PlayerState::Standing || state == PlayerState::Crouching || state == PlayerState::LookingUp)
 	{
-		Sanic::_TextureManager::Instance()->DrawFrame("player", (int)Sanic::_Game::Instance()->getPlayer()->getPosX() - camX, (int)Sanic::_Game::Instance()->getPlayer()->getPosY() - camY, (int)Sanic::_Game::Instance()->getPlayer()->getWidth(), (int)Sanic::_Game::Instance()->getPlayer()->getHeight(), 0, 0, 0, Sanic::_Game::Instance()->getRenderer(),
-			//Standing still he keeps looking the way he last went
-			Sanic::_Game::Instance()->getPlayer()->GetFacing() == -1 ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+		//Crouching and looking up have no picture of their own yet: only the camera shows them
+		Sanic::_TextureManager::Instance()->DrawFrame("player", x, y, w, h, 0, 0, 0, renderer, flip);
 	}
-	else if (state == PlayerState::Running)
+	else if (state == PlayerState::Walking || state == PlayerState::Falling || state == PlayerState::Hurt)
 	{
-		if (Sanic::_Game::Instance()->getPlayer()->GetFacing() == -1)
-		{
-			Sanic::_TextureManager::Instance()->DrawAnimation("player", (int)Sanic::_Game::Instance()->getPlayer()->getPosX() - camX, (int)Sanic::_Game::Instance()->getPlayer()->getPosY() - camY, (int)Sanic::_Game::Instance()->getPlayer()->getWidth(), (int)Sanic::_Game::Instance()->getPlayer()->getHeight(), 0, 1, 5, 200, Sanic::_Game::Instance()->getRenderer(), SDL_FLIP_HORIZONTAL);
-		}
-		else 
-		{
-			Sanic::_TextureManager::Instance()->DrawAnimation("player", (int)Sanic::_Game::Instance()->getPlayer()->getPosX() - camX, (int)Sanic::_Game::Instance()->getPlayer()->getPosY() - camY, (int)Sanic::_Game::Instance()->getPlayer()->getWidth(), (int)Sanic::_Game::Instance()->getPlayer()->getHeight(), 0, 1, 5, 200, Sanic::_Game::Instance()->getRenderer());
-		}
+		//Walking and running are one picture for now. When running has its own, it begins when he reaches top
+		//speed and ends when he is under it. (In the reference the test that ends it is a step late for speeds
+		//to the left: a slip not to copy.)
+		Sanic::_TextureManager::Instance()->DrawAnimation("player", x, y, w, h, 0, 1, 5, 200, renderer, flip);
 	}
-	if (state == PlayerState::Jumping)
+	else if (state == PlayerState::Jumping || state == PlayerState::RampJumping || state == PlayerState::Rolling)
 	{
-		Sanic::_TextureManager::Instance()->DrawAnimation("player", (int)Sanic::_Game::Instance()->getPlayer()->getPosX() - camX, (int)Sanic::_Game::Instance()->getPlayer()->getPosY() - camY, (int)Sanic::_Game::Instance()->getPlayer()->getWidth(), (int)Sanic::_Game::Instance()->getPlayer()->getHeight(), 0, 3, 4, 50, Sanic::_Game::Instance()->getRenderer());
-	}
-	else if (state == PlayerState::Rolling)
-	{
-		Sanic::_TextureManager::Instance()->DrawAnimation("player", (int)Sanic::_Game::Instance()->getPlayer()->getPosX() - camX, (int)Sanic::_Game::Instance()->getPlayer()->getPosY() - camY, (int)Sanic::_Game::Instance()->getPlayer()->getWidth(), (int)Sanic::_Game::Instance()->getPlayer()->getHeight(), 0, 3, 5, 100, Sanic::_Game::Instance()->getRenderer());
+		//The ball: a jump and a roll are the same picture
+		Sanic::_TextureManager::Instance()->DrawAnimation("player", x, y, w, h, 0, 3, 4, 50, renderer);
 	}
 	else if (state == PlayerState::Skidding)
 	{
-		if (Sanic::_Game::Instance()->getPlayer()->GetFacing() == -1)
-		{
-			Sanic::_TextureManager::Instance()->DrawAnimation("player", (int)Sanic::_Game::Instance()->getPlayer()->getPosX() - camX, (int)Sanic::_Game::Instance()->getPlayer()->getPosY() - camY, (int)Sanic::_Game::Instance()->getPlayer()->getWidth(), (int)Sanic::_Game::Instance()->getPlayer()->getHeight(), 0, 5, 2, 100, Sanic::_Game::Instance()->getRenderer(), SDL_FLIP_HORIZONTAL);
-		}
-		else 
-		{
-			Sanic::_TextureManager::Instance()->DrawAnimation("player", (int)Sanic::_Game::Instance()->getPlayer()->getPosX() - camX, (int)Sanic::_Game::Instance()->getPlayer()->getPosY() - camY, (int)Sanic::_Game::Instance()->getPlayer()->getWidth(), (int)Sanic::_Game::Instance()->getPlayer()->getHeight(), 0, 5, 2, 200, Sanic::_Game::Instance()->getRenderer());
-		}
+		Sanic::_TextureManager::Instance()->DrawAnimation("player", x, y, w, h, 0, 5, 2, 100, renderer, flip);
 	}
 }

@@ -14,16 +14,16 @@ namespace Sanic {
 			}
 			return instance;
 		}
-		
+
 		void HandleInput();
 
 		// Keys held by a script instead of a hand ("--hold" on the command line): they count as pressed, together
 		// with whatever is pressed on the keyboard, until this is called again.
-		void HoldKeys(bool left, bool right, bool jump);
+		void HoldKeys(bool left, bool right, bool up, bool down, bool jump);
 
 		// What the keys do to the game, whoever holds them. HandleInput calls it with the keyboard and the script;
 		// a test calls it itself, once before every update, and so needs neither a keyboard nor a window.
-		void Press(bool left, bool right, bool jump, bool hurt);
+		void Press(bool left, bool right, bool up, bool down, bool jump, bool hurt);
 
 	private:
 		InputManager() {};
@@ -33,12 +33,17 @@ namespace Sanic {
 		Command* noZ_ = new ReleaseJumpCommand;
 		Command* arrowLeft_ = new MoveLeftCommand;
 		Command* arrowRight_ = new MoveRightCommand;
+		Command* arrowUp_ = new LookUpCommand;
+		Command* noUp_ = new ReleaseLookUpCommand;
 		Command* arrowDown_ = new RollingCommand;
+		Command* noDown_ = new ReleaseRollingCommand;
 		Command* noArrow_ = new StopMovement;
 		Command* J_ = new TakeDamage;
 
 		bool heldLeft = false;
 		bool heldRight = false;
+		bool heldUp = false;
+		bool heldDown = false;
 		bool heldJump = false;
 
 		static InputManager* instance;
